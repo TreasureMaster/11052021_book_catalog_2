@@ -9,7 +9,12 @@ class Book:
         self.title = title
         self.author = author
         self.number_of_pages = pages
-        self.is_completed = is_comleted
+        if isinstance(is_comleted, bool):
+            self.is_completed = is_comleted
+        elif is_comleted in {'r', 'c'}:
+            self.is_completed = True if is_comleted == 'c' else False
+        else:
+            raise ValueError
 
     def __str__(self):
         return '{0}{1}. {2}, pp. {3}'.format(

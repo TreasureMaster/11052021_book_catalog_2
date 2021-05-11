@@ -11,13 +11,17 @@ def run_tests():
     book_collection = BookCollection()
     print(book_collection)
     assert not book_collection.books  # PEP 8 suggests not using len() to test for empty lists
+    print('--- Passed.')
 
     # Test loading books
     print("Test loading books:")
     book_collection.load_books('books.csv')
     print(book_collection)
     assert book_collection.books  # assuming CSV file is non-empty, length should be non-zero
+    print('--- Passed.')
 
+    import sys
+    sys.exit()
     # Test adding a new Book with values
     print("Test adding new book:")
     book_collection.add_book(Book("War and Peace", "William Shakespeare", 999, False))
