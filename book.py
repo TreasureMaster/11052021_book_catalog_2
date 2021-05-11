@@ -26,3 +26,7 @@ class Book:
     def mark_completed(self):
         """Mark the book as completed."""
         self.is_completed = True
+
+    def is_long(self):
+        """Book length Test."""
+        return self.number_of_pages > 500

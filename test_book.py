@@ -29,7 +29,7 @@ def run_tests():
 
     # Test mark_required()
     print("Book marking Test:")
-    # TODO: Write tests to show the mark_required() method works
+    # Write tests to show the mark_required() method works
     new_book.mark_required()
     assert not new_book.is_completed
     new_book.mark_completed()
@@ -37,7 +37,11 @@ def run_tests():
     print('--- Passed.')
 
     # Test is_long()
-    # TODO: Write tests to show the is_long() method works
+    print("Book length Test:")
+    # Write tests to show the is_long() method works
+    assert not default_book.is_long()
+    assert new_book.is_long()
+    print('--- Passed.')
 
     # TODO: Add more tests, as appropriate
 
