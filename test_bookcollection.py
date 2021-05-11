@@ -20,19 +20,36 @@ def run_tests():
     assert book_collection.books  # assuming CSV file is non-empty, length should be non-zero
     print('--- Passed.')
 
-    import sys
-    sys.exit()
     # Test adding a new Book with values
     print("Test adding new book:")
     book_collection.add_book(Book("War and Peace", "William Shakespeare", 999, False))
     print(book_collection)
+    print('--- Passed.')
 
     # Test sorting books
     print("Test sorting - author:")
     book_collection.sort("author")
     print(book_collection)
-    # TODO: Add more sorting tests
+    print('--- Passed.')
 
+    # Add more sorting tests
+    print("Test sorting - title:")
+    book_collection.sort("title")
+    print(book_collection)
+    print('--- Passed.')
+
+    print("Test sorting - number_of_pages:")
+    book_collection.sort("number_of_pages")
+    print(book_collection)
+    print('--- Passed.')
+
+    print("Test sorting - pages:")
+    book_collection.sort("pages")
+    print(book_collection)
+    print('--- Passed.')
+
+    import sys
+    sys.exit()
     # TODO: Test get_required_pages()
     print("Test get_required_pages():")
     new_book_collection = BookCollection()

@@ -8,7 +8,7 @@ class Book:
     def __init__(self, title='', author='', pages=0, is_comleted=False):
         self.title = title
         self.author = author
-        self.number_of_pages = pages
+        self.number_of_pages = int(pages)
         if isinstance(is_comleted, bool):
             self.is_completed = is_comleted
         elif is_comleted in {'r', 'c'}:

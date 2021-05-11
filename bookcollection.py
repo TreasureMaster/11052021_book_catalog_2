@@ -1,4 +1,5 @@
 """..."""
+import operator
 from book import Book
 
 # Create your BookCollection class in this file
@@ -16,7 +17,6 @@ class BookCollection:
 
     def __str__(self):
         """List command implementation."""
-        # books.sort(key=how_sort)
         string = ''
         for num, book in enumerate(self.books, start=1):
             # Displaying a list of books
@@ -45,7 +45,7 @@ class BookCollection:
         """Calculates the maximum length of string to align."""
         length = 0
         for book in self.books:
-            ln = len(getattr(book, attr))
+            ln = len(str(getattr(book, attr)))
             if ln > length:
                 length = ln
         return length
@@ -60,6 +60,14 @@ class BookCollection:
     def save_backup(self):
         """Saves old data to backup file."""
         raise NotImplementedError
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def sort(self, by_sort='author'):
+        if by_sort == 'pages':
+            by_sort = 'number_of_pages'
+        self.books.sort(key=operator.attrgetter(by_sort))
 
 
 if __name__ == '__main__':
