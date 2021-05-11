@@ -18,3 +18,11 @@ class Book:
             self.title or '"Empty Book"',
             self.number_of_pages
         )
+
+    def mark_required(self):
+        """Mark the book as required."""
+        self.is_completed = False
+
+    def mark_completed(self):
+        """Mark the book as completed."""
+        self.is_completed = True

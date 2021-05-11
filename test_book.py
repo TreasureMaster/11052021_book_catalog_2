@@ -13,6 +13,7 @@ def run_tests():
     assert default_book.author == ""
     assert default_book.number_of_pages == 0
     assert not default_book.is_completed
+    print('--- Passed.')
 
     # Test initial-value book
     print("Test initial-value book:")
@@ -24,9 +25,16 @@ def run_tests():
     assert new_book.number_of_pages == 501
     assert new_book.is_completed
     assert str(new_book) == ' Dory. Fish Fingers, pp. 501'
+    print('--- Passed.')
 
     # Test mark_required()
+    print("Book marking Test:")
     # TODO: Write tests to show the mark_required() method works
+    new_book.mark_required()
+    assert not new_book.is_completed
+    new_book.mark_completed()
+    assert new_book.is_completed
+    print('--- Passed.')
 
     # Test is_long()
     # TODO: Write tests to show the is_long() method works
