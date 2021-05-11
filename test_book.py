@@ -17,7 +17,13 @@ def run_tests():
     # Test initial-value book
     print("Test initial-value book:")
     new_book = Book("Fish Fingers", "Dory", 501, True)
-    # TODO: Write tests to show this initialisation works
+    # Write tests to show this initialisation works
+    print(new_book)
+    assert new_book.title == "Fish Fingers"
+    assert new_book.author == "Dory"
+    assert new_book.number_of_pages == 501
+    assert new_book.is_completed
+    assert str(new_book) == ' Dory. Fish Fingers, pp. 501'
 
     # Test mark_required()
     # TODO: Write tests to show the mark_required() method works
