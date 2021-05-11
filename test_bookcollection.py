@@ -62,7 +62,13 @@ def run_tests():
     assert new_book_collection.get_required_pages() == 1368
     print('--- Passed.')
 
-    # TODO: Test saving books (check CSV file manually to see results)
+    # Test saving books (check CSV file manually to see results)
+    print("Test saving books:")
+    # 5 books sorted by pages
+    book_collection.save_books('collection.csv')
+    # 3 books
+    new_book_collection.save_books('new_books.csv')
+    print('--- Passed.')
 
     # TODO: Add more tests, as appropriate
 

@@ -24,6 +24,15 @@ class Book:
             self.number_of_pages
         )
 
+    def str2csv(self):
+        """Prepare book data for csv file."""
+        return ','.join((
+            self.title,
+            self.author,
+            str(self.number_of_pages),
+            'c' if self.is_completed else 'r'
+        ))
+
     def mark_required(self):
         """Mark the book as required."""
         self.is_completed = False

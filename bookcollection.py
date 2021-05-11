@@ -57,8 +57,15 @@ class BookCollection:
             self.books.append(Book(*line.rstrip().split(',')))
         book_file.close()
 
-    def save_backup(self):
-        """Saves old data to backup file."""
+    def save_books(self, filename=''):
+        """Save csv file for list of books."""
+        book_file = open(filename, 'w', encoding='utf-8')
+        for book in self.books:
+            print(book.str2csv(), file=book_file)
+        book_file.close()
+
+    def get_backup_name(self):
+        """Get backup filename."""
         raise NotImplementedError
 
     def add_book(self, book):

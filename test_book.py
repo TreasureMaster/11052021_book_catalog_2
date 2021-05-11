@@ -44,6 +44,12 @@ def run_tests():
     print('--- Passed.')
 
     # TODO: Add more tests, as appropriate
+    # Test for csv line
+    print("Get csv line Test:")
+    assert new_book.str2csv() == 'Fish Fingers,Dory,501,c'
+    other_book = Book("The 360 Degree Leader", "John Maxwell", 369, False)
+    assert other_book.str2csv() == 'The 360 Degree Leader,John Maxwell,369,r'
+    print('--- Passed.')
 
 
 run_tests()
