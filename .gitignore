@@ -1,0 +1,5 @@
+.idea/
+__pycache__/
+
+# My dirs/files
+tasks/
