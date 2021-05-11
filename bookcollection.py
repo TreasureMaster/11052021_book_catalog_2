@@ -85,14 +85,3 @@ class BookCollection:
             if not book.is_completed:
                 page_nums += book.number_of_pages
         return page_nums
-
-
-if __name__ == '__main__':
-    col = BookCollection()
-    col.load_books('books.csv')
-    for book in col.books:
-        print(book)
-    print(col.max_string_length(col.PAGES))
-    # print(col.max_string_length(col.AUTHOR))
-    # print(col.max_string_length(col.TITLE))
-    print(col)

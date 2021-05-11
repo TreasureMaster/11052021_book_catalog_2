@@ -71,6 +71,11 @@ def run_tests():
     print('--- Passed.')
 
     # TODO: Add more tests, as appropriate
-
+    # Test max_string_length()
+    print("Test max_string_length():")
+    assert new_book_collection.max_string_length(BookCollection.TITLE) == 22
+    assert new_book_collection.max_string_length(BookCollection.AUTHOR) == 19
+    assert new_book_collection.max_string_length(BookCollection.PAGES) == 3
+    print('--- Passed.')
 
 run_tests()
