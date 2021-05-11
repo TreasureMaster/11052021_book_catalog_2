@@ -69,6 +69,16 @@ class BookCollection:
             by_sort = 'number_of_pages'
         self.books.sort(key=operator.attrgetter(by_sort))
 
+    def get_required_pages(self):
+        """Get the required number of pages."""
+        # Total number of pages to read
+        page_nums = 0
+        for book in self.books:
+            # Accounting for books that you need to read
+            if not book.is_completed:
+                page_nums += book.number_of_pages
+        return page_nums
+
 
 if __name__ == '__main__':
     col = BookCollection()
