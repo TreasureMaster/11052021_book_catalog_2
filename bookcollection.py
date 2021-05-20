@@ -35,9 +35,13 @@ class BookCollection:
                 self.max_string_length(BookCollection.PAGES),
                 '' if book.number_of_pages == 1 else 's'
             ))
-        string = string.rstrip()
+        # string = string.rstrip()
         if string:
-            return string
+            required = ('You need to read {0} pages in {1} books.'.format(
+                self.get_required_pages(),
+                self.get_required_books()
+            ))
+            return string + required
         else:
             return 'Collection of books is empty.'
 
