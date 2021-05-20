@@ -7,7 +7,7 @@ from book import Book
 
 class BookCollection:
     """Implements the BookCollection class."""
-    # BACKUP_POSTFIX = '_backup'
+    BACKUP_POSTFIX = '_backup'
     TITLE = 'title'
     AUTHOR = 'author'
     PAGES = 'number_of_pages'
@@ -54,12 +54,14 @@ class BookCollection:
                 length = ln
         return length
 
-    def load_books(self, filename=''):
+    def load_books(self, filename='', backup=False):
         """Read csv file and creates list of books."""
         book_file = open(filename, 'r', encoding='utf-8')
         for line in book_file.readlines():
             self.books.append(Book(*line.rstrip().split(',')))
         book_file.close()
+        if backup:
+            self.save_books(self.get_backup_name(filename))
 
     def save_books(self, filename=''):
         """Save csv file for list of books."""
@@ -68,9 +70,14 @@ class BookCollection:
             print(book.str2csv(), file=book_file)
         book_file.close()
 
-    def get_backup_name(self):
+    def get_backup_name(self, filename=''):
         """Get backup filename."""
-        raise NotImplementedError
+        backup_name = filename.rsplit('.', maxsplit=1)
+        if len(backup_name) == 1:
+            backup_name = backup_name[0] + BookCollection.BACKUP_POSTFIX
+        else:
+            backup_name = backup_name[0] + BookCollection.BACKUP_POSTFIX + '.' + backup_name[1]
+        return backup_name
 
     def add_book(self, book):
         self.books.append(book)

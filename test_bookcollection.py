@@ -84,4 +84,10 @@ def run_tests():
     assert len(book_collection) == 5
     print('--- Passed.')
 
+    # Test: backup filename get
+    print("Test backup filename getting:")
+    assert new_book_collection.get_backup_name('collection.csv') == 'collection_backup.csv'
+    assert new_book_collection.get_backup_name('books') == 'books_backup'
+    print('--- Passed.')
+
 run_tests()

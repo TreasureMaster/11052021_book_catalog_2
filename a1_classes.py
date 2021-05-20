@@ -260,7 +260,7 @@ def main():
     # Creating a collection of books
     books = BookCollection()
     # Formation of the list of books and display of the menu
-    books.load_books('books.csv')
+    books.load_books('books.csv', backup=True)
     print('{} books loaded'.format(len(books)))
     help_menu()
 
