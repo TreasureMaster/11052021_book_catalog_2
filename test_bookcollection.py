@@ -48,18 +48,21 @@ def run_tests():
     print(book_collection)
     print('--- Passed.')
 
-    # Test get_required_pages()
-    print("Test get_required_pages():")
+    # Test get_required_pages() and get_required_books()
+    print("Test get_required_pages() and get_required_books():")
     new_book_collection = BookCollection()
     # Add required book
     new_book_collection.add_book(Book("War and Peace", "William Shakespeare", 999, False))
     assert new_book_collection.get_required_pages() == 999
+    assert new_book_collection.get_required_books() == 1
     # Add required book
     new_book_collection.add_book(Book("The 360 Degree Leader", "John Maxwell", 369, False))
     assert new_book_collection.get_required_pages() == 1368
+    assert new_book_collection.get_required_books() == 2
     # Add comleted book
     new_book_collection.add_book(Book("In Search of Lost Time", "Marcel Proust", 93, True))
     assert new_book_collection.get_required_pages() == 1368
+    assert new_book_collection.get_required_books() == 2
     print('--- Passed.')
 
     # Test saving books (check CSV file manually to see results)

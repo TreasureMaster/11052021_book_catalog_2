@@ -96,3 +96,13 @@ class BookCollection:
             if not book.is_completed:
                 page_nums += book.number_of_pages
         return page_nums
+
+    def get_required_books(self):
+        """Get the required number of books."""
+        # Total number of pages to read
+        book_nums = 0
+        for book in self.books:
+            # Accounting for books that you need to read
+            if not book.is_completed:
+                book_nums += 1
+        return book_nums

@@ -208,36 +208,36 @@ def is_required(books):
 
 
 # ------------------------- for Save/Load filename ------------------------- #
-def read_list():
-    """Read csv file and creates list of books.
-    Saves old data to backup file."""
-    book_file = open(FILENAME, 'r', encoding='utf-8')
+# def read_list():
+#     """Read csv file and creates list of books.
+#     Saves old data to backup file."""
+#     book_file = open(FILENAME, 'r', encoding='utf-8')
 
-    # Prepare filename for saving the previous list
-    backup_name = FILENAME.rsplit('.', maxsplit=1)
-    if len(backup_name) == 1:
-        backup_name = backup_name[0] + BACKUP_POSTFIX
-    else:
-        backup_name = backup_name[0] + BACKUP_POSTFIX + '.' + backup_name[1]
-    backup = open(backup_name, 'w', encoding='utf-8')
+#     # Prepare filename for saving the previous list
+#     backup_name = FILENAME.rsplit('.', maxsplit=1)
+#     if len(backup_name) == 1:
+#         backup_name = backup_name[0] + BACKUP_POSTFIX
+#     else:
+#         backup_name = backup_name[0] + BACKUP_POSTFIX + '.' + backup_name[1]
+#     backup = open(backup_name, 'w', encoding='utf-8')
 
-    # Read list of books and save old info in backup file
-    books = []
-    for line in book_file.readlines():
-        backup.write(line)
-        books.append(line.rstrip().split(','))
-    book_file.close()
-    backup.close()
-    return books
+#     # Read list of books and save old info in backup file
+#     books = []
+#     for line in book_file.readlines():
+#         backup.write(line)
+#         books.append(line.rstrip().split(','))
+#     book_file.close()
+#     backup.close()
+#     return books
 
 
-def write_list(books):
-    """Save updated list of books."""
-    book_file = open(FILENAME, 'w', encoding='utf-8')
-    for line in books:
-        line = ','.join(line)
-        book_file.write(line + '\n')
-    book_file.close()
+# def write_list(books):
+#     """Save updated list of books."""
+#     book_file = open(FILENAME, 'w', encoding='utf-8')
+#     for line in books:
+#         line = ','.join(line)
+#         book_file.write(line + '\n')
+#     book_file.close()
 
 
 # ------------------------------ for Challenge ----------------------------- #
@@ -268,7 +268,8 @@ def main():
     while True:
         command = input('>>> ').upper()
         if command == 'L':
-            listing_books(books)
+            # listing_books(books)
+            print(books)
         elif command == 'A':
             books = add_book(books)
         elif command == 'M':
