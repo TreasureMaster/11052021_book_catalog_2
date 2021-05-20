@@ -78,4 +78,10 @@ def run_tests():
     assert new_book_collection.max_string_length(BookCollection.PAGES) == 3
     print('--- Passed.')
 
+    # Test: books collection length get
+    print("Test collection length:")
+    assert len(new_book_collection) == 3
+    assert len(book_collection) == 5
+    print('--- Passed.')
+
 run_tests()

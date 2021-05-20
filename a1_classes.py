@@ -3,6 +3,7 @@
 # Optionally, you may also use BookCollection class
 
 from book import Book
+from bookcollection import BookCollection
 
 # Constants for application info
 APP_NAME = 'Reading Tracker'
@@ -256,8 +257,10 @@ def main():
     """
     # Header output
     print('{0} {1} - by {2}'.format(APP_NAME, VERSION, MY_NAME))
+    # Creating a collection of books
+    books = BookCollection()
     # Formation of the list of books and display of the menu
-    books = read_list()
+    books.load_books('books.csv')
     print('{} books loaded'.format(len(books)))
     help_menu()
 
@@ -277,9 +280,9 @@ def main():
         help_menu()
 
     # Record updated list of books
-    write_list(books)
-    print('{0} books saved to {1}'.format(len(books), FILENAME))
-    print('{}'.format(quotation()))
+    # write_list(books)
+    # print('{0} books saved to {1}'.format(len(books), FILENAME))
+    # print('{}'.format(quotation()))
 
 
 if __name__ == '__main__':

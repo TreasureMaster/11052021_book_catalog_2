@@ -41,6 +41,10 @@ class BookCollection:
         else:
             return 'Collection of books is empty.'
 
+    def __len__(self):
+        """Returns length of collection."""
+        return len(self.books)
+
     def max_string_length(self, attr):
         """Calculates the maximum length of string to align."""
         length = 0
