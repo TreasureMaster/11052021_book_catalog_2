@@ -46,84 +46,84 @@ Q - Quit""")
 
 
 # ---------------------------- for List command ---------------------------- #
-def listing_books(books):
-    """List command implementation."""
-    # Calculate lengths for aligning strings
-    max_title = max_string_length(books, TITLE)
-    max_author = max_string_length(books, AUTHOR)
-    max_pages = max_string_length(books, PAGES)
-    books.sort(key=how_sort)
-    for num, book in enumerate(books, start=1):
-        # Displaying a list of books
-        print('{0}{1}. {2:<{5}} by {3:<{6}}  {4:>{7}} pages'.format(
-            # REQUIRED or COMPLETED label
-            '*' if book[MARK] == REQUIRED else ' ',
-            # Book number in the list
-            num,
-            # Book data
-            book[TITLE],
-            book[AUTHOR],
-            book[PAGES],
-            # Lengths for aligning strings
-            max_title,
-            max_author,
-            max_pages
-        ))
-    book_nums, page_nums = get_required_pages(books)
-    if book_nums:
-        print('You need to read {0} pages in {1} books.'.format(
-            page_nums,
-            book_nums
-        ))
-    else:
-        print('No books left to read. Why not add a new book?')
+# def listing_books(books):
+#     """List command implementation."""
+#     # Calculate lengths for aligning strings
+#     max_title = max_string_length(books, TITLE)
+#     max_author = max_string_length(books, AUTHOR)
+#     max_pages = max_string_length(books, PAGES)
+#     books.sort(key=how_sort)
+#     for num, book in enumerate(books, start=1):
+#         # Displaying a list of books
+#         print('{0}{1}. {2:<{5}} by {3:<{6}}  {4:>{7}} pages'.format(
+#             # REQUIRED or COMPLETED label
+#             '*' if book[MARK] == REQUIRED else ' ',
+#             # Book number in the list
+#             num,
+#             # Book data
+#             book[TITLE],
+#             book[AUTHOR],
+#             book[PAGES],
+#             # Lengths for aligning strings
+#             max_title,
+#             max_author,
+#             max_pages
+#         ))
+#     book_nums, page_nums = get_required_pages(books)
+#     if book_nums:
+#         print('You need to read {0} pages in {1} books.'.format(
+#             page_nums,
+#             book_nums
+#         ))
+#     else:
+#         print('No books left to read. Why not add a new book?')
 
 
-def get_required_pages(books):
-    """Get the required number of books and pages"""
-    # Total number of books to be read
-    book_nums = 0
-    # Total number of pages to read
-    page_nums = 0
-    for book in books:
-        # Accounting for books that you need to read
-        if book[MARK] == REQUIRED:
-            book_nums += 1
-            page_nums += int(book[PAGES])
-    return book_nums, page_nums
+# def get_required_pages(books):
+#     """Get the required number of books and pages"""
+#     # Total number of books to be read
+#     book_nums = 0
+#     # Total number of pages to read
+#     page_nums = 0
+#     for book in books:
+#         # Accounting for books that you need to read
+#         if book[MARK] == REQUIRED:
+#             book_nums += 1
+#             page_nums += int(book[PAGES])
+#     return book_nums, page_nums
 
 
-def max_string_length(books, pos):
-    """Calculates the maximum length of string to align."""
-    length = 0
-    for book in books:
-        ln = len(book[pos])
-        if ln > length:
-            length = ln
-    return length
+# def max_string_length(books, pos):
+#     """Calculates the maximum length of string to align."""
+#     length = 0
+#     for book in books:
+#         ln = len(book[pos])
+#         if ln > length:
+#             length = ln
+#     return length
 
 
-def how_sort(item):
-    """Sorting book list template."""
-    return item[AUTHOR], item[TITLE]
+# def how_sort(item):
+#     """Sorting book list template."""
+#     return item[AUTHOR], item[TITLE]
 
 
 # ----------------------------- for Add command ---------------------------- #
-def add_book(books):
+def get_added_book():
     """Add command implementation."""
     # Create a new book and add it to the list of books
-    books.append([
+    book = [
         add_string('title'),
         add_string('author'),
         add_number('pages'),
         REQUIRED
-    ])
+    ]
     print('{0}, ({1} pages) added to {2}'.format(
-        books[LAST][TITLE],
-        books[LAST][PAGES],
+        book[TITLE],
+        book[PAGES],
         APP_NAME
     ))
-    return books
+    return book
 
 
 def add_string(name):
@@ -271,7 +271,8 @@ def main():
             # listing_books(books)
             print(books)
         elif command == 'A':
-            books = add_book(books)
+            # books = add_book(books)
+            books.add_book(Book(*get_added_book()))
         elif command == 'M':
             mark_book(books)
         elif command == 'Q':
