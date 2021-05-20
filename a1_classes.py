@@ -8,16 +8,16 @@ from bookcollection import BookCollection
 # Constants for application info
 APP_NAME = 'Reading Tracker'
 MY_NAME = 'Your Name'
-VERSION = '1.0'
+VERSION = '2.0'
 # Constants for work with files
 FILENAME = 'books.csv'
-BACKUP_POSTFIX = '_backup'
+# BACKUP_POSTFIX = '_backup'
 # Constants for work with list of books
 TITLE, AUTHOR, PAGES, MARK = range(4)
 REQUIRED = 'r'
 COMPLETED = 'c'
 # Last position in list
-LAST = -1
+# LAST = -1
 # List of quotes
 QUOTES_LIST = [
     'So many books, so little time. Frank Zappa',
@@ -182,14 +182,14 @@ def mark_book(books):
         position = int(add_number()) - 1
         if position > len(books)-1:
             print('Invalid book number')
-        elif books[position][MARK] == COMPLETED:
+        elif books[position].is_completed:
             print('That book is already completed')
             break
         else:
-            books[position][MARK] = COMPLETED
+            books[position].mark_completed()
             print('{0} by {1} completed!'.format(
-                books[position][TITLE],
-                books[position][AUTHOR]
+                books[position].title,
+                books[position].author
             ))
             break
     else:
@@ -201,7 +201,7 @@ def is_required(books):
     required = False
     for book in books:
         # Search books marked REQUIRED
-        if book[MARK] == REQUIRED:
+        if not book.is_completed:
             required = True
             break
     return required
@@ -260,7 +260,7 @@ def main():
     # Creating a collection of books
     books = BookCollection()
     # Formation of the list of books and display of the menu
-    books.load_books('books.csv', backup=True)
+    books.load_books(FILENAME, backup=True)
     print('{} books loaded'.format(len(books)))
     help_menu()
 
@@ -268,10 +268,8 @@ def main():
     while True:
         command = input('>>> ').upper()
         if command == 'L':
-            # listing_books(books)
             print(books)
         elif command == 'A':
-            # books = add_book(books)
             books.add_book(Book(*get_added_book()))
         elif command == 'M':
             mark_book(books)
@@ -282,9 +280,9 @@ def main():
         help_menu()
 
     # Record updated list of books
-    # write_list(books)
-    # print('{0} books saved to {1}'.format(len(books), FILENAME))
-    # print('{}'.format(quotation()))
+    books.save_books()
+    print('{0} books saved to {1}'.format(len(books), FILENAME))
+    print('{}'.format(quotation()))
 
 
 if __name__ == '__main__':

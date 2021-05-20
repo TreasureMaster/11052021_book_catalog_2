@@ -51,7 +51,7 @@ class BookCollection:
 
     def __getitem__(self, key):
         """Returns book from collection."""
-        return self.books[key].str2csv().split(',')
+        return self.books[key]
 
     def max_string_length(self, attr):
         """Calculates the maximum length of string to align."""
@@ -64,6 +64,7 @@ class BookCollection:
 
     def load_books(self, filename='', backup=False):
         """Read csv file and creates list of books."""
+        self.filename = filename
         book_file = open(filename, 'r', encoding='utf-8')
         for line in book_file.readlines():
             self.books.append(Book(*line.rstrip().split(',')))
@@ -73,6 +74,7 @@ class BookCollection:
 
     def save_books(self, filename=''):
         """Save csv file for list of books."""
+        filename = filename or self.filename
         book_file = open(filename, 'w', encoding='utf-8')
         for book in self.books:
             print(book.str2csv(), file=book_file)

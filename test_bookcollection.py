@@ -95,8 +95,8 @@ def run_tests():
 
     # Test: Getting books from the collection
     print('Test book get as list:')
-    assert new_book_collection[0] == ["War and Peace", "William Shakespeare", '999', 'r']
-    assert new_book_collection[2] == ["In Search of Lost Time", "Marcel Proust", '93', 'c']
+    assert str(new_book_collection[0]) == '*William Shakespeare. War and Peace, pp. 999'
+    assert str(new_book_collection[2]) == ' Marcel Proust. In Search of Lost Time, pp. 93'
     print('--- Passed.')
 
 run_tests()
