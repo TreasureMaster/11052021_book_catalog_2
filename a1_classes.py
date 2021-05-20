@@ -175,7 +175,7 @@ def mark_book(books):
     is_input_required = is_required(books)
     # Header output if required books are available
     if is_input_required:
-        listing_books(books)
+        print(books)
         print('Enter the number of a book to mark as completed')
     # Enter the number of the completed book
     while is_input_required:

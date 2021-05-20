@@ -93,4 +93,10 @@ def run_tests():
     assert new_book_collection.get_backup_name('books') == 'books_backup'
     print('--- Passed.')
 
+    # Test: Getting books from the collection
+    print('Test book get as list:')
+    assert new_book_collection[0] == ["War and Peace", "William Shakespeare", '999', 'r']
+    assert new_book_collection[2] == ["In Search of Lost Time", "Marcel Proust", '93', 'c']
+    print('--- Passed.')
+
 run_tests()

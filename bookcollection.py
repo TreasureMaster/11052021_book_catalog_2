@@ -49,6 +49,10 @@ class BookCollection:
         """Returns length of collection."""
         return len(self.books)
 
+    def __getitem__(self, key):
+        """Returns book from collection."""
+        return self.books[key].str2csv().split(',')
+
     def max_string_length(self, attr):
         """Calculates the maximum length of string to align."""
         length = 0
