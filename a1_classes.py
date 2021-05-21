@@ -68,7 +68,7 @@ def add_string(name):
     entry = ''
     while not is_valid_input:
         try:
-            entry = input('{}: '.format(name.capitalize()))
+            entry = input('{}: '.format(name.capitalize())).strip()
             if not entry:
                 raise ValueError('Input can not be blank')
             else:
@@ -100,7 +100,7 @@ def add_number(name='>>>'):
                 is_valid_input = True
         except ValueError as exc:
             print(exc)
-    return entry
+    return number
 
 
 # ---------------------------- for Mark command ---------------------------- #
