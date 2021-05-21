@@ -11,13 +11,10 @@ MY_NAME = 'Your Name'
 VERSION = '2.0'
 # Constants for work with files
 FILENAME = 'books.csv'
-# BACKUP_POSTFIX = '_backup'
 # Constants for work with list of books
 TITLE, AUTHOR, PAGES, MARK = range(4)
 REQUIRED = 'r'
 COMPLETED = 'c'
-# Last position in list
-# LAST = -1
 # List of quotes
 QUOTES_LIST = [
     'So many books, so little time. Frank Zappa',
@@ -43,69 +40,6 @@ L - List all books
 A - Add new book
 M - Mark a book as completed
 Q - Quit""")
-
-
-# ---------------------------- for List command ---------------------------- #
-# def listing_books(books):
-#     """List command implementation."""
-#     # Calculate lengths for aligning strings
-#     max_title = max_string_length(books, TITLE)
-#     max_author = max_string_length(books, AUTHOR)
-#     max_pages = max_string_length(books, PAGES)
-#     books.sort(key=how_sort)
-#     for num, book in enumerate(books, start=1):
-#         # Displaying a list of books
-#         print('{0}{1}. {2:<{5}} by {3:<{6}}  {4:>{7}} pages'.format(
-#             # REQUIRED or COMPLETED label
-#             '*' if book[MARK] == REQUIRED else ' ',
-#             # Book number in the list
-#             num,
-#             # Book data
-#             book[TITLE],
-#             book[AUTHOR],
-#             book[PAGES],
-#             # Lengths for aligning strings
-#             max_title,
-#             max_author,
-#             max_pages
-#         ))
-#     book_nums, page_nums = get_required_pages(books)
-#     if book_nums:
-#         print('You need to read {0} pages in {1} books.'.format(
-#             page_nums,
-#             book_nums
-#         ))
-#     else:
-#         print('No books left to read. Why not add a new book?')
-
-
-# def get_required_pages(books):
-#     """Get the required number of books and pages"""
-#     # Total number of books to be read
-#     book_nums = 0
-#     # Total number of pages to read
-#     page_nums = 0
-#     for book in books:
-#         # Accounting for books that you need to read
-#         if book[MARK] == REQUIRED:
-#             book_nums += 1
-#             page_nums += int(book[PAGES])
-#     return book_nums, page_nums
-
-
-# def max_string_length(books, pos):
-#     """Calculates the maximum length of string to align."""
-#     length = 0
-#     for book in books:
-#         ln = len(book[pos])
-#         if ln > length:
-#             length = ln
-#     return length
-
-
-# def how_sort(item):
-#     """Sorting book list template."""
-#     return item[AUTHOR], item[TITLE]
 
 
 # ----------------------------- for Add command ---------------------------- #
@@ -205,39 +139,6 @@ def is_required(books):
             required = True
             break
     return required
-
-
-# ------------------------- for Save/Load filename ------------------------- #
-# def read_list():
-#     """Read csv file and creates list of books.
-#     Saves old data to backup file."""
-#     book_file = open(FILENAME, 'r', encoding='utf-8')
-
-#     # Prepare filename for saving the previous list
-#     backup_name = FILENAME.rsplit('.', maxsplit=1)
-#     if len(backup_name) == 1:
-#         backup_name = backup_name[0] + BACKUP_POSTFIX
-#     else:
-#         backup_name = backup_name[0] + BACKUP_POSTFIX + '.' + backup_name[1]
-#     backup = open(backup_name, 'w', encoding='utf-8')
-
-#     # Read list of books and save old info in backup file
-#     books = []
-#     for line in book_file.readlines():
-#         backup.write(line)
-#         books.append(line.rstrip().split(','))
-#     book_file.close()
-#     backup.close()
-#     return books
-
-
-# def write_list(books):
-#     """Save updated list of books."""
-#     book_file = open(FILENAME, 'w', encoding='utf-8')
-#     for line in books:
-#         line = ','.join(line)
-#         book_file.write(line + '\n')
-#     book_file.close()
 
 
 # ------------------------------ for Challenge ----------------------------- #

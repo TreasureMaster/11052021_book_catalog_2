@@ -5,14 +5,14 @@
 class Book:
     """Implements the Book class."""
 
-    def __init__(self, title='', author='', pages=0, is_comleted=False):
+    def __init__(self, title='', author='', pages=0, is_completed=False):
         self.title = title
         self.author = author
         self.number_of_pages = int(pages)
-        if isinstance(is_comleted, bool):
-            self.is_completed = is_comleted
-        elif is_comleted in {'r', 'c'}:
-            self.is_completed = True if is_comleted == 'c' else False
+        if isinstance(is_completed, bool):
+            self.is_completed = is_completed
+        elif is_completed in {'r', 'c'}:
+            self.is_completed = True if is_completed == 'c' else False
         else:
             raise ValueError
 

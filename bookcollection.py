@@ -14,6 +14,7 @@ class BookCollection:
 
     def __init__(self):
         self.books = []
+        self.filename = ''
 
     def __str__(self):
         """List command implementation."""
@@ -35,7 +36,6 @@ class BookCollection:
                 self.max_string_length(BookCollection.PAGES),
                 '' if book.number_of_pages == 1 else 's'
             ))
-        # string = string.rstrip()
         if string:
             required = ('You need to read {0} pages in {1} books.'.format(
                 self.get_required_pages(),
@@ -52,6 +52,10 @@ class BookCollection:
     def __getitem__(self, key):
         """Returns book from collection."""
         return self.books[key]
+
+    def __iter__(self):
+        """PyCharm requirements."""
+        return iter(self.books)
 
     def max_string_length(self, attr):
         """Calculates the maximum length of string to align."""
@@ -90,9 +94,11 @@ class BookCollection:
         return backup_name
 
     def add_book(self, book):
+        """Add book in collection."""
         self.books.append(book)
 
     def sort(self, by_sort='author'):
+        """Sort books in collection by field."""
         if by_sort == 'pages':
             by_sort = 'number_of_pages'
         self.books.sort(key=operator.attrgetter(by_sort))

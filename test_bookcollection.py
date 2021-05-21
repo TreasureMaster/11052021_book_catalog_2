@@ -59,7 +59,7 @@ def run_tests():
     new_book_collection.add_book(Book("The 360 Degree Leader", "John Maxwell", 369, False))
     assert new_book_collection.get_required_pages() == 1368
     assert new_book_collection.get_required_books() == 2
-    # Add comleted book
+    # Add completed book
     new_book_collection.add_book(Book("In Search of Lost Time", "Marcel Proust", 93, True))
     assert new_book_collection.get_required_pages() == 1368
     assert new_book_collection.get_required_books() == 2
@@ -98,5 +98,6 @@ def run_tests():
     assert str(new_book_collection[0]) == '*William Shakespeare. War and Peace, pp. 999'
     assert str(new_book_collection[2]) == ' Marcel Proust. In Search of Lost Time, pp. 93'
     print('--- Passed.')
+
 
 run_tests()
