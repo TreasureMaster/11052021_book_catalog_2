@@ -166,7 +166,8 @@ def main():
     help_menu()
 
     # Loop control menu
-    while True:
+    command = None
+    while command != 'Q':
         command = input('>>> ').upper()
         if command == 'L':
             print(books)
@@ -175,7 +176,7 @@ def main():
         elif command == 'M':
             mark_book(books)
         elif command == 'Q':
-            break
+            continue
         else:
             print('Invalid menu choice')
         help_menu()
