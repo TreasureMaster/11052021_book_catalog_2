@@ -6,6 +6,7 @@ GitHub URL:
 """
 # Create your main program in this file, using the ReadingTrackerApp class
 
+from logging import warn
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
@@ -15,6 +16,7 @@ from kivy.uix.button import Button
 from kivy.uix.recycleview import RecycleView
 from kivy.core.window import Window
 from kivy.metrics import dp
+from kivy.graphics import Color, Rectangle, Line
 
 from bookcollection import BookCollection
 
@@ -55,40 +57,32 @@ class MainScreen(Screen):
             minimum_height=self.layout.setter('height')
         )
 
-        title_label = Label(
-            text='Test program label',
-            size_hint_y=None,
-            height=dp(40),
-            font_size=16
-        )
-        right_box.add_widget(title_label)
+        self.top_label = HeadLabel(self.books)
+        right_box.add_widget(self.top_label)
 
         root = RecycleView(
             size_hint=(1, None),
             width=Window.width,
-            # height=Window.height-title_label.height
         )
         root.add_widget(self.layout)
         right_box.add_widget(root)
 
-        warn_label = Label(
-            text='Warning test label',
-            size_hint_y=None,
-            height=dp(50),
-            color='red',
-            font_size=16
-        )
-        right_box.add_widget(warn_label)
-        root.height = Window.height-title_label.height-warn_label.height
+        self.warn_label = WarningLabel()
+        right_box.add_widget(self.warn_label)
+        # warn_label.set_label_text('Warning', True)
+        
+        root.height = Window.height-self.top_label.height-self.warn_label.height
 
         for book in self.books:
-            self.layout.add_widget(BookButton(book))
+            self.layout.add_widget(BookButton(book, self.top_label, self.warn_label))
 
 class BookButton(Button):
 
-    def __init__(self, book, **kwargs):
+    def __init__(self, book, top_label, warn_label, **kwargs):
         super().__init__(**kwargs)
         self.book = book
+        self.top_label = top_label
+        self.warn_label = warn_label
         self.set_color()
         self.text = str(book)
 
@@ -98,6 +92,73 @@ class BookButton(Button):
     def set_color(self):
         self.background_color = 'white' if self.book.is_completed else 'aqua'
 
+    def on_press(self):
+        if self.book.is_completed:
+            self.book.mark_required()
+        else:
+            self.book.mark_completed()
+        self.set_color()
+        self.text = str(self.book)
+        self.top_label.set_label_text()
+        text = 'You {} \'{}\'.{}'.format(
+            'completed' if self.book.is_completed else 'need to read',
+            self.book.title,
+            (' Great job!' if self.book.is_completed else ' Get started!') if self.book.is_long() else ''
+        )
+        self.warn_label.set_label_text(text)
+
+
+class BookLabel(Label):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def build(self):
+        return self
+
+class HeadLabel(BookLabel):
+
+    def __init__(self, collection, **kwargs):
+        super().__init__(**kwargs)
+        self.collection = collection
+        self.set_label_text()
+
+    def set_label_text(self, text=''):
+        if text:
+            self.text = text
+        else:
+            self.text = 'Pages to read: {}'.format(self.collection.get_required_pages())
+
+    def test(self):
+        return self.collection.get_required_pages()
+
+
+class WarningLabel(BookLabel):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.set_label_text('Welcome to the Reading Tracker!')
+        self.warn = False
+
+    def set_label_text(self, text, warn=False):
+        self.text = text
+        self.warn = warn
+        self.opacity = .8
+        if self.warn:
+            self.color = 'darksalmon'
+        else:
+            self.color = 'lightgreen'
+        self.on_size()
+
+    def on_size(self, *args):
+        self.canvas.before.clear()
+        if hasattr(self, 'warn'):
+            color = (.8,0,0) if self.warn else (0,.5,0)
+        else:
+            color = (0,.5,0)
+        with self.canvas.before:
+            Color(*color, 0.25)
+            Rectangle(pos=self.pos, size=self.size)
 
 class ReadingTrackerApp(App):
     """..."""
