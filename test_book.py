@@ -24,7 +24,7 @@ def run_tests():
     assert new_book.author == "Dory"
     assert new_book.number_of_pages == 501
     assert new_book.is_completed
-    assert str(new_book) == ' Dory. Fish Fingers, pp. 501'
+    assert str(new_book) == 'Fish Fingers by Dory, 501 pages (completed)'
     print('--- Passed.')
 
     # Test mark_required()

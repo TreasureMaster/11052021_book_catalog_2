@@ -19,39 +19,30 @@ from kivy.metrics import dp
 from bookcollection import BookCollection
 
 
+# Constants for work with files
+FILENAME = 'books.csv'
+
 class MainScreen(Screen):
     
-    # def __init__(self, **kwargs):
-    #     super().__init__(**kwargs)
+    def __init__(self, books=None, **kwargs):
+        super().__init__(**kwargs)
+        self.books = books
 
     def on_enter(self):
-        self.main_layout = GridLayout(
-            cols=2,
-            rows=1,
-            spacing=10
-        )
+        # Базовый бокс
+        self.main_layout = BoxLayout()
         self.add_widget(self.main_layout)
-        # left_box = BoxLayout(
-        #     padding=10
-        #     # spacing=10
-        # )
-        # self.add_widget(self.main_layout)
-        # right_box = BoxLayout(
-        #     padding=10
-        # )
-        # self.add_widget(self.main_layout)
 
         sort_label = Label(
             text='Sort by:',
-            # outline_color='#484848',
-            # outline_width=3
+            size_hint_x=1,
+            font_size=20,
         )
         self.main_layout.add_widget(sort_label)
 
         right_box = BoxLayout(
-            padding=10,
             orientation='vertical',
-            # size_hint_y=None
+            size_hint_x=3
         )
         self.main_layout.add_widget(right_box)
 
@@ -63,21 +54,19 @@ class MainScreen(Screen):
         self.layout.bind(
             minimum_height=self.layout.setter('height')
         )
-        # right_box.add_widget(self.layout)
 
         title_label = Label(
             text='Test program label',
             size_hint_y=None,
-            height=dp(40)
+            height=dp(40),
+            font_size=16
         )
         right_box.add_widget(title_label)
 
         root = RecycleView(
             size_hint=(1, None),
-            # size - размер виджета (свойства width и height)
-            # size=(Window.width, Window.height-title_label.height)
             width=Window.width,
-            height=Window.height-title_label.height
+            # height=Window.height-title_label.height
         )
         root.add_widget(self.layout)
         right_box.add_widget(root)
@@ -86,28 +75,44 @@ class MainScreen(Screen):
             text='Warning test label',
             size_hint_y=None,
             height=dp(50),
-            color=(1, 0, 255, 1)
+            color='red',
+            font_size=16
         )
         right_box.add_widget(warn_label)
         root.height = Window.height-title_label.height-warn_label.height
 
-        for num in range(10):
-            btn = Button(
-                text=str(num)*10,
-                size_hint_y=None,
-                # height=dp(40)
-            )
-            self.layout.add_widget(btn)
+        for book in self.books:
+            self.layout.add_widget(BookButton(book))
+
+class BookButton(Button):
+
+    def __init__(self, book, **kwargs):
+        super().__init__(**kwargs)
+        self.book = book
+        self.set_color()
+        self.text = str(book)
+
+    def build(self):
+        return self
+
+    def set_color(self):
+        self.background_color = 'white' if self.book.is_completed else 'aqua'
+
 
 class ReadingTrackerApp(App):
     """..."""
-    def __init__(self):
-        super().__init__()
-        self.collection = BookCollection()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.books = BookCollection()
+        try:
+            # WARNING пока без сохранения backup
+            self.books.load_books(FILENAME, backup=False)
+        except (FileNotFoundError, LookupError):
+            pass
 
     def build(self):
         sm = ScreenManager()
-        sm.add_widget(MainScreen())
+        sm.add_widget(MainScreen(self.books))
         return sm
 
 
