@@ -8,16 +8,61 @@
     font_size: 16
     height: dp(50)
 
-<SortingSpinner>:
-    text: 'Author'
-    values: ('Author', 'Title', 'Pages', 'Completed')
-    size_hint_y: None
-    on_text: self.sort_collection()
+<HeadLabel@BookLabel>:
+    text: ''
 
-<CollectionGrid>:
-    size_hint: 1, None
-    width: Window.width
-    GridLayout:
-        cols: 1
-        spacing: 10
-        size_hint_y: None
+<WarningLabel@BookLabel>:
+    text: ''
+
+# <SortingSpinner>:
+#     text: 'Author'
+#     values: ('Author', 'Title', 'Pages', 'Completed')
+#     size_hint_y: None
+#     on_text: self.sort_collection()
+
+# <CollectionGrid>:
+#     size_hint: 1, None
+#     width: Window.width
+#     GridLayout:
+#         cols: 1
+#         spacing: 10
+#         size_hint_y: None
+
+<MainBox>:
+    spinner: f_spin
+    maingrid: f_grid
+    recycle: f_rec
+    headlabel: f_head
+    warnlabel: f_warn
+    # базовый блок
+    # BoxLayout:
+    # левый блок
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: 1
+        Label:
+            text: 'Sort by:'
+            font_size: 16
+        Spinner:
+            id: f_spin
+            text: 'Author'
+            values: ('Author', 'Title', 'Pages', 'Completed')
+            on_text: root.building_grid(f_spin, f_spin.text)
+    # правый блок
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: 3
+        HeadLabel:
+            id: f_head
+            # text: 'test1'
+        RecycleView:
+            id: f_rec
+            size_hint: 1, None
+            GridLayout:
+                id: f_grid
+                cols: 1
+                spacing: 10
+                size_hint_y: None
+        WarningLabel:
+            id: f_warn
+            text: 'Welcome to the Reading Tracker 2.0!'
