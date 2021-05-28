@@ -28,11 +28,37 @@
         Label:
             text: 'Sort by:'
             font_size: 16
+            size_hint_y: None
+            height: dp(50)
         Spinner:
             id: f_spin
             text: 'Author'
             values: ('Author', 'Title', 'Pages', 'Completed')
             on_text: root.building_grid(f_spin, f_spin.text)
+        Label:
+            text: 'Add New Book...'
+            font_size: 16
+        Label:
+            text: 'Title:'
+        TextInput:
+            id: add_title
+            text: ''
+        Label:
+            text: 'Author:'
+        TextInput:
+            id: add_author
+            text: ''
+        Label:
+            text: 'Pages:'
+        TextInput:
+            id: add_pages
+            text: ''
+        Button:
+            text: 'Add Book'
+            on_press: root.add_book(add_title, add_author, add_pages)
+        Button:
+            text: 'Clear'
+            on_press: root.clear_addfields(add_title, add_author, add_pages)
     # правый блок
     BoxLayout:
         orientation: 'vertical'

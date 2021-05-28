@@ -20,6 +20,7 @@ from kivy.graphics import Color, Rectangle, Line
 from kivy.properties import ObjectProperty
 
 from bookcollection import BookCollection
+from book import Book
 
 
 # Constants for work with files
@@ -158,6 +159,31 @@ class MainBox(BoxLayout):
                 )
             )
 
+    def add_book(self, title_obj, author_obj, pages_obj):
+        title, author, pages = map(str.strip, (title_obj.text, author_obj.text, pages_obj.text))
+        if not title or not author or not pages:
+            self.warnlabel.set_label_text('All fields must be completed', True)
+            return
+        try:
+            pages = int(pages)
+        except Exception:
+            self.warnlabel.set_label_text('Please enter a valid number', True)
+            return
+        if pages < 1:
+            self.warnlabel.set_label_text('Pages must be > 0', True)
+            return
+        self.warnlabel.set_label_text('You added a new book')
+        self.books.add_book(Book(title, author, pages))
+        self.headlabel.set_label_text()
+        self.building_grid(None, self.spinner.text)
+        title_obj.text = ''
+        author_obj.text = ''
+        pages_obj.text = ''
+
+    def clear_addfields(self, title, author, pages):
+        title.text = ''
+        author.text = ''
+        pages.text = ''
 
 class ReadingTrackerApp(App):
     """..."""

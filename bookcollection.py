@@ -104,7 +104,15 @@ class BookCollection:
             by_sort = 'number_of_pages'
         if by_sort == 'completed':
             by_sort = 'is_completed'
-        self.books.sort(key=operator.attrgetter(by_sort), reverse=(True if by_sort == 'is_completed' else False))
+        if by_sort == 'author' or by_sort == 'title':
+            how_sort = lambda m: operator.attrgetter(by_sort)(m).lower()
+        else:
+            how_sort = operator.attrgetter(by_sort)
+        self.books.sort(
+            # key=(lambda m: operator.attrgetter(by_sort)(m).lower()) if by_sort != 'number_of_pages' else operator.attrgetter(by_sort),
+            key=how_sort,
+            reverse=(True if by_sort == 'is_completed' else False)
+        )
 
     def get_required_pages(self):
         """Get the required number of pages."""
