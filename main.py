@@ -191,8 +191,7 @@ class ReadingTrackerApp(App):
         super().__init__(**kwargs)
         self.books = BookCollection()
         try:
-            # WARNING пока без сохранения backup
-            self.books.load_books(FILENAME, backup=False)
+            self.books.load_books(FILENAME, backup=True)
         except (FileNotFoundError, LookupError):
             pass
 
@@ -200,6 +199,10 @@ class ReadingTrackerApp(App):
         sm = ScreenManager()
         sm.add_widget(MainScreen(self.books))
         return sm
+
+    def on_stop(self):
+        self.books.save_books(FILENAME)
+        return super().on_stop()
 
 
 if __name__ == '__main__':
