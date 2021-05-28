@@ -99,6 +99,7 @@ class BookCollection:
 
     def sort(self, by_sort='author'):
         """Sort books in collection by field."""
+        by_sort = by_sort.lower()
         if by_sort == 'pages':
             by_sort = 'number_of_pages'
         if by_sort == 'completed':

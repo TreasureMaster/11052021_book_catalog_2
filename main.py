@@ -35,83 +35,7 @@ class MainScreen(Screen):
         # Базовый бокс
         self.main_box = MainBox(self.books)
         self.add_widget(self.main_box)
-        # self.main_layout = BoxLayout()
-        # self.add_widget(self.main_layout)
 
-        # left_box = BoxLayout(
-        #     orientation='vertical',
-        #     size_hint_x=1
-        # )
-        # self.main_layout.add_widget(left_box)
-
-        # left_box.add_widget(Label(
-        #     text='Sort by:',
-        #     font_size=16
-        # ))
-
-        # left_box.add_widget(SortingSpinner(self.books))
-
-        # right_box = BoxLayout(
-        #     orientation='vertical',
-        #     size_hint_x=3
-        # )
-        # self.main_layout.add_widget(right_box)
-
-        # self.layout = GridLayout(
-        #     cols=1,
-        #     spacing=10,
-        #     size_hint_y=None
-        # )
-        # self.layout.bind(
-        #     minimum_height=self.layout.setter('height')
-        # )
-
-        # self.top_label = HeadLabel(self.books)
-        # right_box.add_widget(self.top_label)
-
-        # root = RecycleView(
-        #     size_hint=(1, None),
-        #     width=Window.width,
-        # )
-        # root.add_widget(self.layout)
-        # right_box.add_widget(root)
-
-        # self.warn_label = WarningLabel()
-        # right_box.add_widget(self.warn_label)
-        # # warn_label.set_label_text('Warning', True)
-        
-        # root.height = Window.height-self.top_label.height-self.warn_label.height
-
-        # for book in self.books:
-        #     self.layout.add_widget(BookButton(book, self.top_label, self.warn_label))
-
-# class CollectionGrid(RecycleView):
-
-#     def __init__(self, collection, **kwargs):
-#         super().__init__(**kwargs)
-#         self.collection = collection
-
-    # def get_collection(self):
-    #     return self.collection
-
-    # def 
-
-class SortingSpinner(Spinner):
-
-    def __init__(self, collection, **kwargs):
-        super().__init__(**kwargs)
-        self.collection = collection
-        self.sort_collection()
-
-    def build(self):
-        return self
-
-    def show_text(self):
-        print(self.text)
-
-    def sort_collection(self):
-        self.collection.sort(self.text.lower())
-        print(self.collection)
 
 class BookButton(Button):
 
@@ -160,10 +84,7 @@ class HeadLabel(BookLabel):
         self.collection = collection
         # self.set_label_text()
 
-    def set_label_text(self):#, text=''):
-        # if text:
-        #     self.text = text
-        # else:
+    def set_label_text(self):
         self.text = 'Pages to read: {}'.format(self.collection.get_required_pages())
 
     def test(self):
@@ -218,10 +139,7 @@ class MainBox(BoxLayout):
         self.building_grid(None, 'Author')
 
     def building_grid(self, instance, value):
-        # print('Object from event:', instance)
-        # print('Value from event:', value)
-        # self.headlabel.set_label_text(self.books.get_required_pages())
-        # self.warnlabel.set_label_text('Welcome to the Reading Tracker 2.0!')
+        self.books.sort(value)
         self.recycle.width = Window.width
         self.recycle.height = Window.height - self.headlabel.height - self.warnlabel.height
         # Позволяет полностью прокручивать окно (иначе низ списка не до конца виден)
@@ -230,7 +148,6 @@ class MainBox(BoxLayout):
         )
         self.maingrid.clear_widgets()
         for book in self.books:
-            # print(x, end=' ')
             self.maingrid.add_widget(
                 BookButton(
                     book=book,
