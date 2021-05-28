@@ -7,3 +7,17 @@
     size_hint_y: None
     font_size: 16
     height: dp(50)
+
+<SortingSpinner>:
+    text: 'Author'
+    values: ('Author', 'Title', 'Pages', 'Completed')
+    size_hint_y: None
+    on_text: self.sort_collection()
+
+<CollectionGrid>:
+    size_hint: 1, None
+    width: Window.width
+    GridLayout:
+        cols: 1
+        spacing: 10
+        size_hint_y: None

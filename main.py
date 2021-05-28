@@ -6,9 +6,9 @@ GitHub URL:
 """
 # Create your main program in this file, using the ReadingTrackerApp class
 
-from logging import warn
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.spinner import Spinner
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
@@ -35,12 +35,18 @@ class MainScreen(Screen):
         self.main_layout = BoxLayout()
         self.add_widget(self.main_layout)
 
-        sort_label = Label(
-            text='Sort by:',
-            size_hint_x=1,
-            font_size=20,
+        left_box = BoxLayout(
+            orientation='vertical',
+            size_hint_x=1
         )
-        self.main_layout.add_widget(sort_label)
+        self.main_layout.add_widget(left_box)
+
+        left_box.add_widget(Label(
+            text='Sort by:',
+            font_size=16
+        ))
+
+        left_box.add_widget(SortingSpinner(self.books))
 
         right_box = BoxLayout(
             orientation='vertical',
@@ -75,6 +81,34 @@ class MainScreen(Screen):
 
         for book in self.books:
             self.layout.add_widget(BookButton(book, self.top_label, self.warn_label))
+
+class CollectionGrid(RecycleView):
+
+    def __init__(self, collection, **kwargs):
+        super().__init__(**kwargs)
+        self.collection = collection
+
+    # def get_collection(self):
+    #     return self.collection
+
+    # def 
+
+class SortingSpinner(Spinner):
+
+    def __init__(self, collection, **kwargs):
+        super().__init__(**kwargs)
+        self.collection = collection
+        self.sort_collection()
+
+    def build(self):
+        return self
+
+    def show_text(self):
+        print(self.text)
+
+    def sort_collection(self):
+        self.collection.sort(self.text.lower())
+        print(self.collection)
 
 class BookButton(Button):
 

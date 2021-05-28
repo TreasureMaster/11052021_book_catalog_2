@@ -101,7 +101,9 @@ class BookCollection:
         """Sort books in collection by field."""
         if by_sort == 'pages':
             by_sort = 'number_of_pages'
-        self.books.sort(key=operator.attrgetter(by_sort))
+        if by_sort == 'completed':
+            by_sort = 'is_completed'
+        self.books.sort(key=operator.attrgetter(by_sort), reverse=(True if by_sort == 'is_completed' else False))
 
     def get_required_pages(self):
         """Get the required number of pages."""
