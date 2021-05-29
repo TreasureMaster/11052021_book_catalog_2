@@ -109,7 +109,6 @@ class BookCollection:
         else:
             how_sort = operator.attrgetter(by_sort)
         self.books.sort(
-            # key=(lambda m: operator.attrgetter(by_sort)(m).lower()) if by_sort != 'number_of_pages' else operator.attrgetter(by_sort),
             key=how_sort,
             reverse=(True if by_sort == 'is_completed' else False)
         )

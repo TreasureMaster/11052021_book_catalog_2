@@ -16,7 +16,7 @@ from kivy.uix.button import Button
 from kivy.uix.recycleview import RecycleView
 from kivy.core.window import Window
 from kivy.metrics import dp
-from kivy.graphics import Color, Rectangle, Line
+from kivy.graphics import Color, Rectangle
 from kivy.properties import ObjectProperty
 
 from bookcollection import BookCollection
@@ -26,11 +26,13 @@ from book import Book
 # Constants for work with files
 FILENAME = 'books.csv'
 
+
 class MainScreen(Screen):
     
     def __init__(self, books=None, **kwargs):
         super().__init__(**kwargs)
         self.books = books
+        self.main_box = None
 
     def on_enter(self):
         # Базовый бокс
@@ -78,12 +80,12 @@ class BookLabel(Label):
     def build(self):
         return self
 
+
 class HeadLabel(BookLabel):
 
     def __init__(self, collection=None, **kwargs):
         super().__init__(**kwargs)
         self.collection = collection
-        # self.set_label_text()
 
     def set_label_text(self):
         self.text = 'Pages to read: {}'.format(self.collection.get_required_pages())
@@ -112,9 +114,9 @@ class WarningLabel(BookLabel):
     def on_size(self, *args):
         self.canvas.before.clear()
         if hasattr(self, 'warn'):
-            color = (.8,0,0) if self.warn else (0,.5,0)
+            color = (.8, 0, 0) if self.warn else (0, .5, 0)
         else:
-            color = (0,.5,0)
+            color = (0, .5, 0)
         with self.canvas.before:
             Color(*color, 0.25)
             Rectangle(pos=self.pos, size=self.size)
@@ -145,7 +147,6 @@ class MainBox(BoxLayout):
         self.books.sort(value)
         self.recycle.width = Window.width
         self.recycle.height = Window.height - self.headlabel.height - self.warnlabel.height
-        # Позволяет полностью прокручивать окно (иначе низ списка не до конца виден)
         self.maingrid.bind(
             minimum_height=self.maingrid.setter('height')
         )
@@ -168,7 +169,7 @@ class MainBox(BoxLayout):
             return
         try:
             pages = int(pages)
-        except Exception:
+        except ValueError:
             self.warnlabel.set_label_text('Please enter a valid number', True)
             return
         if pages < 1:
@@ -189,7 +190,6 @@ class MainBox(BoxLayout):
 
     def text_control(self, field):
         if field.text.endswith('\t'):
-            print('смена фокуса')
             field.text = field.text[:-1]
             idx = self.markers.index(field)
             field.focus = False
@@ -197,6 +197,7 @@ class MainBox(BoxLayout):
                 self.markers[0].focus = True
             else:
                 self.markers[idx+1].focus = True
+
 
 class ReadingTrackerApp(App):
     """..."""
