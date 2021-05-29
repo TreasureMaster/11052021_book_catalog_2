@@ -43,16 +43,19 @@
         TextInput:
             id: add_title
             text: ''
+            on_text: root.text_control(add_title)
         Label:
             text: 'Author:'
         TextInput:
             id: add_author
             text: ''
+            on_text: root.text_control(add_author)
         Label:
             text: 'Pages:'
         TextInput:
             id: add_pages
             text: ''
+            on_text: root.text_control(add_pages)
         Button:
             text: 'Add Book'
             on_press: root.add_book(add_title, add_author, add_pages)

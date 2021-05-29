@@ -132,6 +132,8 @@ class MainBox(BoxLayout):
         super().__init__(**kwargs)
         self.books = books
         self.init_grid()
+        self.ids_obj = dict(zip(self.ids.values(), self.ids.keys()))
+        self.markers = [self.ids['add_title'], self.ids['add_author'], self.ids['add_pages']]
 
     def init_grid(self):
         self.headlabel.collection = self.books
@@ -184,6 +186,17 @@ class MainBox(BoxLayout):
         title.text = ''
         author.text = ''
         pages.text = ''
+
+    def text_control(self, field):
+        if field.text.endswith('\t'):
+            print('смена фокуса')
+            field.text = field.text[:-1]
+            idx = self.markers.index(field)
+            field.focus = False
+            if idx == len(self.markers)-1:
+                self.markers[0].focus = True
+            else:
+                self.markers[idx+1].focus = True
 
 class ReadingTrackerApp(App):
     """..."""
