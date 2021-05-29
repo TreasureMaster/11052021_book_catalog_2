@@ -28,7 +28,7 @@ FILENAME = 'books.csv'
 
 
 class MainScreen(Screen):
-    
+    """Base screen."""
     def __init__(self, books=None, **kwargs):
         super().__init__(**kwargs)
         self.books = books
@@ -41,7 +41,7 @@ class MainScreen(Screen):
 
 
 class BookButton(Button):
-
+    """Кнопка со ссылкой на определенную книгу."""
     def __init__(self, book, top_label, warn_label, **kwargs):
         super().__init__(**kwargs)
         self.book = book
@@ -54,9 +54,11 @@ class BookButton(Button):
         return self
 
     def set_color(self):
+        """Установка цвета кнопки в зависимости от необходимости/завершения чтения"""
         self.background_color = 'white' if self.book.is_completed else 'aqua'
 
     def on_press(self):
+        """Обработка нажатия на кнопку книги"""
         if self.book.is_completed:
             self.book.mark_required()
         else:
@@ -73,7 +75,7 @@ class BookButton(Button):
 
 
 class BookLabel(Label):
-
+    """Базовый класс надписей"""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -82,26 +84,28 @@ class BookLabel(Label):
 
 
 class HeadLabel(BookLabel):
-
+    """Верхняя надпись."""
     def __init__(self, collection=None, **kwargs):
         super().__init__(**kwargs)
         self.collection = collection
 
     def set_label_text(self):
+        """Выводит количество страниц, требуемых для прочтения"""
         self.text = 'Pages to read: {}'.format(self.collection.get_required_pages())
 
-    def test(self):
-        return self.collection.get_required_pages()
+    # def test(self):
+    #     return self.collection.get_required_pages()
 
 
 class WarningLabel(BookLabel):
-
+    """Нижняя информационная надпись"""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.set_label_text('Welcome to the Reading Tracker 2.0!')
         self.warn = False
 
     def set_label_text(self, text, warn=False):
+        """Устанавливает текст и цвет надписи"""
         self.text = text
         self.warn = warn
         self.opacity = .8
@@ -112,6 +116,7 @@ class WarningLabel(BookLabel):
         self.on_size()
 
     def on_size(self, *args):
+        """Устанавливает цвет фона надписи"""
         self.canvas.before.clear()
         if hasattr(self, 'warn'):
             color = (.8, 0, 0) if self.warn else (0, .5, 0)
@@ -123,7 +128,8 @@ class WarningLabel(BookLabel):
 
 
 class MainBox(BoxLayout):
-
+    """Базовый класс макета страницы"""
+    # Ссылки на части макета страницы, которые установлены в kv-файле
     spinner = ObjectProperty(None)
     maingrid = ObjectProperty(None)
     recycle = ObjectProperty(None)
@@ -134,22 +140,28 @@ class MainBox(BoxLayout):
         super().__init__(**kwargs)
         self.books = books
         self.init_grid()
+        # Маркеры определения внутреннего названия объекта
         self.ids_obj = dict(zip(self.ids.values(), self.ids.keys()))
+        # Маркеры перехода по объектам TextInput при нажатии tab
         self.markers = [self.ids['add_title'], self.ids['add_author'], self.ids['add_pages']]
 
     def init_grid(self):
+        """Предварительные действия при инициализации страницы"""
         self.headlabel.collection = self.books
         self.headlabel.set_label_text()
         self.warnlabel.set_label_text('Welcome to the Reading Tracker 2.0!')
         self.building_grid(None, 'Author')
 
     def building_grid(self, instance, value):
+        """Построение списка книг"""
         self.books.sort(value)
+        # Построение окна прокрутки
         self.recycle.width = Window.width
         self.recycle.height = Window.height - self.headlabel.height - self.warnlabel.height
         self.maingrid.bind(
             minimum_height=self.maingrid.setter('height')
         )
+        # Перерисовка списка книг
         self.maingrid.clear_widgets()
         for book in self.books:
             self.maingrid.add_widget(
@@ -163,7 +175,9 @@ class MainBox(BoxLayout):
             )
 
     def add_book(self, title_obj, author_obj, pages_obj):
+        """Обработка добавления книги"""
         title, author, pages = map(str.strip, (title_obj.text, author_obj.text, pages_obj.text))
+        # Проверка правильности ввода полей
         if not title or not author or not pages:
             self.warnlabel.set_label_text('All fields must be completed', True)
             return
@@ -179,16 +193,16 @@ class MainBox(BoxLayout):
         self.books.add_book(Book(title, author, pages))
         self.headlabel.set_label_text()
         self.building_grid(None, self.spinner.text)
-        title_obj.text = ''
-        author_obj.text = ''
-        pages_obj.text = ''
+        self.clear_addfields(title_obj, author_obj, pages_obj)
 
     def clear_addfields(self, title, author, pages):
+        """Очистка полей добавления книги"""
         title.text = ''
         author.text = ''
         pages.text = ''
 
     def text_control(self, field):
+        """Контроллирование перемещения по полям ввода tab'ом"""
         if field.text.endswith('\t'):
             field.text = field.text[:-1]
             idx = self.markers.index(field)
@@ -200,7 +214,7 @@ class MainBox(BoxLayout):
 
 
 class ReadingTrackerApp(App):
-    """..."""
+    """Базовое приложение"""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.books = BookCollection()
@@ -215,6 +229,7 @@ class ReadingTrackerApp(App):
         return sm
 
     def on_stop(self):
+        """Сохранение обновленного файла со списком книг"""
         self.books.save_books(FILENAME)
         return super().on_stop()
 

@@ -8,20 +8,22 @@
     font_size: 16
     height: dp(50)
 
+# Расширенное объявление меток
+# (только для информации, не обрабатывается kivy)
 <HeadLabel@BookLabel>:
     text: ''
 
 <WarningLabel@BookLabel>:
     text: ''
 
-
+# Главный блок
 <MainBox>:
     spinner: f_spin
     maingrid: f_grid
     recycle: f_rec
     headlabel: f_head
     warnlabel: f_warn
-    # левый блок
+    # Левый блок
     BoxLayout:
         orientation: 'vertical'
         size_hint_x: 1
@@ -30,11 +32,13 @@
             font_size: 16
             size_hint_y: None
             height: dp(50)
+        # Выпадающий список выбора сортировки
         Spinner:
             id: f_spin
             text: 'Author'
             values: ('Author', 'Title', 'Pages', 'Completed')
             on_text: root.building_grid(f_spin, f_spin.text)
+        # Ввод новой книги
         Label:
             text: 'Add New Book...'
             font_size: 16
@@ -56,18 +60,22 @@
             id: add_pages
             text: ''
             on_text: root.text_control(add_pages)
+        # Кнопка добавления книги
         Button:
             text: 'Add Book'
             on_press: root.add_book(add_title, add_author, add_pages)
+        # Кнопка очистки полей ввода
         Button:
             text: 'Clear'
             on_press: root.clear_addfields(add_title, add_author, add_pages)
-    # правый блок
+    # Правый блок
     BoxLayout:
         orientation: 'vertical'
         size_hint_x: 3
+        # Верхняя надпись
         HeadLabel:
             id: f_head
+        # Список книг
         RecycleView:
             id: f_rec
             size_hint: 1, None
@@ -76,6 +84,7 @@
                 cols: 1
                 spacing: 10
                 size_hint_y: None
+        # Нижняя надпись
         WarningLabel:
             id: f_warn
             text: 'Welcome to the Reading Tracker 2.0!'
