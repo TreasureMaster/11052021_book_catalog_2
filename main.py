@@ -230,7 +230,7 @@ class ReadingTrackerApp(App):
 
     def on_stop(self):
         """Сохранение обновленного файла со списком книг"""
-        self.books.save_books(FILENAME)
+        # self.books.save_books(FILENAME)
         return super().on_stop()
 
 
