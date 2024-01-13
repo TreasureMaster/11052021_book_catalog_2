@@ -29,45 +29,45 @@
         orientation: 'vertical'
         size_hint_x: 1
         Label:
-            text: 'Sort by:'
+            text: 'Сортировать по:'
             font_size: 16
             size_hint_y: None
             height: dp(50)
         # Выпадающий список выбора сортировки
         Spinner:
             id: f_spin
-            text: 'Author'
-            values: ('Author', 'Title', 'Pages', 'Completed')
+            text: 'Автору'
+            values: ('Автору', 'Названию', 'Страницам', 'Прочитано')
             on_text: root.building_grid(f_spin, f_spin.text)
         # Ввод новой книги
         Label:
-            text: 'Add New Book...'
+            text: 'Добавить новую книгу...'
             font_size: 16
         Label:
-            text: 'Title:'
+            text: 'Название:'
         TextInput:
             id: add_title
             text: ''
             on_text: root.text_control(add_title)
         Label:
-            text: 'Author:'
+            text: 'Автор:'
         TextInput:
             id: add_author
             text: ''
             on_text: root.text_control(add_author)
         Label:
-            text: 'Pages:'
+            text: 'Страниц:'
         TextInput:
             id: add_pages
             text: ''
             on_text: root.text_control(add_pages)
         # Кнопка добавления книги
         Button:
-            text: 'Add Book'
+            text: 'Добавить книгу'
             on_press: root.add_book(add_title, add_author, add_pages)
         # Кнопка очистки полей ввода
         Button:
-            text: 'Clear'
+            text: 'Очистить'
             on_press: root.clear_addfields(add_title, add_author, add_pages)
     # Правый блок
     BoxLayout:
@@ -88,5 +88,5 @@
         # Нижняя надпись
         WarningLabel:
             id: f_warn
-            text: 'Welcome to the Reading Tracker 2.0!'
+            text: "Добро пожаловать в Reading Tracker 2.0!"
             on_text: root.building_grid(f_spin, f_spin.text)

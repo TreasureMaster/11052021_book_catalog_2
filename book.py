@@ -17,11 +17,11 @@ class Book:
             raise ValueError
 
     def __str__(self):
-        return '{0} by {1}, {2} pages {3}'.format(
-            self.title or '"Empty Book"',
-            self.author or 'Unknown author',
+        return '{0}, автор {1}, {2} стр. {3}'.format(
+            self.title or '"Неизвестная книга"',
+            self.author or 'Неизвестный автор',
             self.number_of_pages,
-            '(completed)' if self.is_completed else '',
+            '(прочитана)' if self.is_completed else '',
         )
 
     def str2csv(self):

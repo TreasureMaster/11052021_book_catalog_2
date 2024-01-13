@@ -66,10 +66,10 @@ class BookButton(Button):
         self.set_color()
         self.text = str(self.book)
         self.top_label.set_label_text()
-        text = 'You {} \'{}\'.{}'.format(
-            'completed' if self.book.is_completed else 'need to read',
+        text = '{} \'{}\'.{}'.format(
+            'Вы прочитали' if self.book.is_completed else 'Вам нужно прочитать',
             self.book.title,
-            (' Great job!' if self.book.is_completed else ' Get started!') if self.book.is_long() else ''
+            (' Хорошая работа!' if self.book.is_completed else ' Начнем!') if self.book.is_long() else ''
         )
         self.warn_label.set_label_text(text)
 
@@ -91,7 +91,7 @@ class HeadLabel(BookLabel):
 
     def set_label_text(self):
         """Выводит количество страниц, требуемых для прочтения"""
-        self.text = 'Pages to read: {}'.format(self.collection.get_required_pages())
+        self.text = 'Необходимо прочитать: {} стр.'.format(self.collection.get_required_pages())
 
     # def test(self):
     #     return self.collection.get_required_pages()
@@ -101,7 +101,7 @@ class WarningLabel(BookLabel):
     """Нижняя информационная надпись"""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.set_label_text('Welcome to the Reading Tracker 2.0!')
+        self.set_label_text("Добро пожаловать в Reading Tracker 2.0!")
         self.warn = False
 
     def set_label_text(self, text, warn=False):
@@ -149,12 +149,19 @@ class MainBox(BoxLayout):
         """Предварительные действия при инициализации страницы"""
         self.headlabel.collection = self.books
         self.headlabel.set_label_text()
-        self.warnlabel.set_label_text('Welcome to the Reading Tracker 2.0!')
-        self.building_grid(None, 'Author')
+        self.warnlabel.set_label_text("Добро пожаловать в Reading Tracker 2.0!")
+        self.building_grid(None, 'Автору')
 
     def building_grid(self, instance, value):
         """Построение списка книг"""
-        self.books.sort(value)
+        LABEL_MAP = {
+            'Автору': 'author',
+            'Названию': 'title',
+            'Страницам': 'pages',
+            'Прочитано': 'completed',
+        }
+        # self.books.sort(value)
+        self.books.sort(LABEL_MAP[value])
         # Построение окна прокрутки
         self.recycle.width = Window.width
         self.recycle.height = Window.height - self.headlabel.height - self.warnlabel.height
@@ -179,17 +186,17 @@ class MainBox(BoxLayout):
         title, author, pages = map(str.strip, (title_obj.text, author_obj.text, pages_obj.text))
         # Проверка правильности ввода полей
         if not title or not author or not pages:
-            self.warnlabel.set_label_text('All fields must be completed', True)
+            self.warnlabel.set_label_text('Все поля должны быть заполнены!', True)
             return
         try:
             pages = int(pages)
         except ValueError:
-            self.warnlabel.set_label_text('Please enter a valid number', True)
+            self.warnlabel.set_label_text('Пожалуйста, введите корректное число!', True)
             return
         if pages < 1:
-            self.warnlabel.set_label_text('Pages must be > 0', True)
+            self.warnlabel.set_label_text('Число страниц должно быть больше 0!', True)
             return
-        self.warnlabel.set_label_text('You added a new book')
+        self.warnlabel.set_label_text('Вы добавили новую книгу')
         self.books.add_book(Book(title, author, pages))
         self.headlabel.set_label_text()
         self.building_grid(None, self.spinner.text)
