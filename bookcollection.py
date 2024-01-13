@@ -65,24 +65,23 @@ class BookCollection:
             if ln > length:
                 length = ln
         return length
-
+# TODO если нет файла, должен вернуть ошибку
+# TODO использовать Pathlib
     def load_books(self, filename='', backup=False):
         """Read csv file and creates list of books."""
         self.filename = filename
-        book_file = open(filename, 'r', encoding='utf-8')
-        for line in book_file.readlines():
-            self.books.append(Book(*line.rstrip().split(',')))
-        book_file.close()
+        with open(filename, 'r', encoding='utf-8') as book_file:
+            for line in book_file.readlines():
+                self.books.append(Book(*line.rstrip().split(',')))
         if backup:
             self.save_books(self.get_backup_name(filename))
 
     def save_books(self, filename=''):
         """Save csv file for list of books."""
         filename = filename or self.filename
-        book_file = open(filename, 'w', encoding='utf-8')
-        for book in self.books:
-            print(book.str2csv(), file=book_file)
-        book_file.close()
+        with open(filename, 'w', encoding='utf-8') as book_file:
+            for book in self.books:
+                print(book.str2csv(), file=book_file)
 
     def get_backup_name(self, filename=''):
         """Get backup filename."""
