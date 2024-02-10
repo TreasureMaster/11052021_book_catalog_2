@@ -1,5 +1,7 @@
 """..."""
 import operator
+import pathlib
+
 from book import Book
 
 # Create your BookCollection class in this file
@@ -14,7 +16,8 @@ class BookCollection:
 
     def __init__(self):
         self.books = []
-        self.filename = ''
+        self.filename = None
+        self.basepath = pathlib.Path(__file__).parent
 
     def __str__(self):
         """List command implementation."""
@@ -67,23 +70,30 @@ class BookCollection:
         return length
 # TODO если нет файла, должен вернуть ошибку
 # TODO использовать Pathlib
-    def load_books(self, filename='', backup=False):
+    def load_books(self, filename=None, backup=False):
         """Read csv file and creates list of books."""
-        self.filename = filename
+        if not filename:
+            raise ValueError('Имя файла должна быть задано!')
+        self.filename = self.basepath / filename
         with open(filename, 'r', encoding='utf-8') as book_file:
             for line in book_file.readlines():
                 self.books.append(Book(*line.rstrip().split(',')))
         if backup:
             self.save_books(self.get_backup_name(filename))
 
-    def save_books(self, filename=''):
+    def save_books(self, filename=None):
         """Save csv file for list of books."""
-        filename = filename or self.filename
+        # if filename:
+        #     filename = filename
+        # else:
+        #     filename = self.filename
+        # FIXME так не выйдет. Нужно единообразное имя файла
+        filename = (self.basepath / filename) if filename else self.filename
         with open(filename, 'w', encoding='utf-8') as book_file:
             for book in self.books:
                 print(book.str2csv(), file=book_file)
 
-    def get_backup_name(self, filename=''):
+    def get_backup_name(self, filename):
         """Get backup filename."""
         backup_name = filename.rsplit('.', maxsplit=1)
         if len(backup_name) == 1:
