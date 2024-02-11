@@ -16,8 +16,8 @@ class BookCollection:
 
     def __init__(self):
         self.books = []
-        self.filename = None
-        self.basepath = pathlib.Path(__file__).parent
+        # self.filename = None
+        # self.basepath = pathlib.Path(__file__).parent
 
     def __str__(self):
         """List command implementation."""
@@ -70,40 +70,40 @@ class BookCollection:
         return length
 # TODO если нет файла, должен вернуть ошибку
 # TODO использовать Pathlib
-    def load_books(self, filename=None, backup=False):
+    # def load_books(self, filename=None, backup=False):
+    def load_books(self):
         """Read csv file and creates list of books."""
-        if not filename:
-            raise ValueError('Имя файла должна быть задано!')
-        self.filename = self.basepath / filename
-        with open(filename, 'r', encoding='utf-8') as book_file:
-            for line in book_file.readlines():
-                self.books.append(Book(*line.rstrip().split(',')))
-        if backup:
-            self.save_books(self.get_backup_name(filename))
+        self.books = [book for book in Book.select()]
+        # if not filename:
+        #     raise ValueError('Имя файла должна быть задано!')
+        # self.filename = self.basepath / filename
+        # with open(filename, 'r', encoding='utf-8') as book_file:
+        #     for line in book_file.readlines():
+        #         self.books.append(Book(*line.rstrip().split(',')))
+        # if backup:
+        #     self.save_books(self.get_backup_name(filename))
 
-    def save_books(self, filename=None):
+    def save_books(self):
         """Save csv file for list of books."""
-        # if filename:
-        #     filename = filename
-        # else:
-        #     filename = self.filename
+        [book.save() for book in self.books]
         # FIXME так не выйдет. Нужно единообразное имя файла
-        filename = (self.basepath / filename) if filename else self.filename
-        with open(filename, 'w', encoding='utf-8') as book_file:
-            for book in self.books:
-                print(book.str2csv(), file=book_file)
+        # filename = (self.basepath / filename) if filename else self.filename
+        # with open(filename, 'w', encoding='utf-8') as book_file:
+        #     for book in self.books:
+        #         print(book.str2csv(), file=book_file)
 
-    def get_backup_name(self, filename):
-        """Get backup filename."""
-        backup_name = filename.rsplit('.', maxsplit=1)
-        if len(backup_name) == 1:
-            backup_name = backup_name[0] + BookCollection.BACKUP_POSTFIX
-        else:
-            backup_name = backup_name[0] + BookCollection.BACKUP_POSTFIX + '.' + backup_name[1]
-        return backup_name
+    # def get_backup_name(self, filename):
+    #     """Get backup filename."""
+    #     backup_name = filename.rsplit('.', maxsplit=1)
+    #     if len(backup_name) == 1:
+    #         backup_name = backup_name[0] + BookCollection.BACKUP_POSTFIX
+    #     else:
+    #         backup_name = backup_name[0] + BookCollection.BACKUP_POSTFIX + '.' + backup_name[1]
+    #     return backup_name
 
     def add_book(self, book):
         """Add book in collection."""
+        book.save()
         self.books.append(book)
 
     def sort(self, by_sort='author'):

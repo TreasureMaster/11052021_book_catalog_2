@@ -197,7 +197,7 @@ class MainBox(BoxLayout):
             self.warnlabel.set_label_text('Число страниц должно быть больше 0!', True)
             return
         self.warnlabel.set_label_text('Вы добавили новую книгу')
-        self.books.add_book(Book(title, author, pages))
+        self.books.add_book(Book(title=title, author=author, number_of_pages=pages))
         self.headlabel.set_label_text()
         self.building_grid(None, self.spinner.text)
         self.clear_addfields(title_obj, author_obj, pages_obj)
@@ -226,7 +226,7 @@ class ReadingTrackerApp(App):
         super().__init__(**kwargs)
         self.books = BookCollection()
         try:
-            self.books.load_books(FILENAME, backup=True)
+            self.books.load_books()
         except (FileNotFoundError, LookupError):
             pass
 
@@ -237,7 +237,7 @@ class ReadingTrackerApp(App):
 
     def on_stop(self):
         """Сохранение обновленного файла со списком книг"""
-        self.books.save_books(FILENAME)
+        self.books.save_books()
         return super().on_stop()
 
 

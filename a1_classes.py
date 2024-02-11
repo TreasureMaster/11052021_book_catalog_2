@@ -12,9 +12,15 @@ VERSION = '2.0'
 # Constants for work with files
 FILENAME = 'books.csv'
 # Constants for work with list of books
-TITLE, AUTHOR, PAGES, MARK = range(4)
-REQUIRED = 'r'
-COMPLETED = 'c'
+# TITLE, AUTHOR, PAGES, MARK = range(4)
+TITLE = 'title'
+AUTHOR = 'author'
+PAGES = 'number_of_pages'
+MARK = 'is_completed'
+# REQUIRED = 'r'
+# COMPLETED = 'c'
+REQUIRED = False
+COMPLETED = True
 # List of quotes
 QUOTES_LIST = [
     'So many books, so little time. Frank Zappa',
@@ -46,12 +52,12 @@ Q - Quit""")
 def get_added_book():
     """Add command implementation."""
     # Create a new book and add it to the list of books
-    book = [
-        add_string('title'),
-        add_string('author'),
-        add_number('pages'),
-        REQUIRED
-    ]
+    book = {
+        TITLE: add_string('title'),
+        AUTHOR: add_string('author'),
+        PAGES: add_number('pages'),
+        MARK: REQUIRED
+    }
     print('{0}, ({1} pages) added to {2}'.format(
         book[TITLE],
         book[PAGES],
@@ -161,7 +167,7 @@ def main():
     # Creating a collection of books
     books = BookCollection()
     # Formation of the list of books and display of the menu
-    books.load_books(FILENAME, backup=True)
+    books.load_books()
     print('{} books loaded'.format(len(books)))
     help_menu()
 
@@ -172,7 +178,7 @@ def main():
         if command == 'L':
             print(books)
         elif command == 'A':
-            books.add_book(Book(*get_added_book()))
+            books.add_book(Book(**get_added_book()))
         elif command == 'M':
             mark_book(books)
         elif command == 'Q':
