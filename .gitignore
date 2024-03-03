@@ -7,3 +7,5 @@ __pycache__/
 tasks/
 stages/
 *.db3
+
+tmp/
