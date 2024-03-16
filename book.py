@@ -30,7 +30,7 @@ class Book(Model):
     #         raise ValueError
 
     def __str__(self):
-        return '{0}, автор {1}, {2} стр. {3}'.format(
+        return '"{0}", {1}, {2} стр. {3}'.format(
             self.title or '"Неизвестная книга"',
             self.author or 'Неизвестный автор',
             self.number_of_pages,

@@ -6,7 +6,14 @@ GitHub URL:
 """
 # Create your main program in this file, using the ReadingTrackerApp class
 
-from kivy.app import App
+# from kivy.app import App
+from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDFloatingActionButtonSpeedDial
+from kivymd.uix.responsivelayout import MDResponsiveLayout
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.label.label import MDLabel
+from kivymd.uix.button.button import MDTextButton, MDFlatButton
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.spinner import Spinner
 from kivy.uix.boxlayout import BoxLayout
@@ -17,7 +24,7 @@ from kivy.uix.recycleview import RecycleView
 from kivy.core.window import Window
 from kivy.metrics import dp
 from kivy.graphics import Color, Rectangle
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, DictProperty
 
 from bookcollection import BookCollection
 from book import Book
@@ -26,11 +33,15 @@ from book import Book
 # Constants for work with files
 FILENAME = 'books.csv'
 
+# class MobileView(MDScreen):
+#     pass
 
 class MainScreen(Screen):
+# class MainScreen(MDResponsiveLayout, MDScreen):
     """Base screen."""
     def __init__(self, books=None, **kwargs):
         super().__init__(**kwargs)
+        # self.mobile_view = MobileView()
         self.books = books
         self.main_box = None
 
@@ -41,6 +52,7 @@ class MainScreen(Screen):
 
 
 class BookButton(Button):
+# class BookButton(MDFlatButton):
     """Кнопка со ссылкой на определенную книгу."""
     def __init__(self, book, top_label, warn_label, **kwargs):
         super().__init__(**kwargs)
@@ -127,7 +139,7 @@ class WarningLabel(BookLabel):
             Rectangle(pos=self.pos, size=self.size)
 
 
-class MainBox(BoxLayout):
+class MainBox(MDBoxLayout):
     """Базовый класс макета страницы"""
     # Ссылки на части макета страницы, которые установлены в kv-файле
     spinner = ObjectProperty(None)
@@ -138,12 +150,13 @@ class MainBox(BoxLayout):
 
     def __init__(self, books=None, **kwargs):
         super().__init__(**kwargs)
+        # self.md_bg_color = 'black'
         self.books = books
         self.init_grid()
         # Маркеры определения внутреннего названия объекта
         self.ids_obj = dict(zip(self.ids.values(), self.ids.keys()))
         # Маркеры перехода по объектам TextInput при нажатии tab
-        self.markers = [self.ids['add_title'], self.ids['add_author'], self.ids['add_pages']]
+        # self.markers = [self.ids['add_title'], self.ids['add_author'], self.ids['add_pages']]
 
     def init_grid(self):
         """Предварительные действия при инициализации страницы"""
@@ -181,47 +194,53 @@ class MainBox(BoxLayout):
                 )
             )
 
-    def add_book(self, title_obj, author_obj, pages_obj):
-        """Обработка добавления книги"""
-        title, author, pages = map(str.strip, (title_obj.text, author_obj.text, pages_obj.text))
-        # Проверка правильности ввода полей
-        if not title or not author or not pages:
-            self.warnlabel.set_label_text('Все поля должны быть заполнены!', True)
-            return
-        try:
-            pages = int(pages)
-        except ValueError:
-            self.warnlabel.set_label_text('Пожалуйста, введите корректное число!', True)
-            return
-        if pages < 1:
-            self.warnlabel.set_label_text('Число страниц должно быть больше 0!', True)
-            return
-        self.warnlabel.set_label_text('Вы добавили новую книгу')
-        self.books.add_book(Book(title=title, author=author, number_of_pages=pages))
-        self.headlabel.set_label_text()
-        self.building_grid(None, self.spinner.text)
-        self.clear_addfields(title_obj, author_obj, pages_obj)
+    # def add_book(self, title_obj, author_obj, pages_obj):
+    #     """Обработка добавления книги"""
+    #     title, author, pages = map(str.strip, (title_obj.text, author_obj.text, pages_obj.text))
+    #     # Проверка правильности ввода полей
+    #     if not title or not author or not pages:
+    #         self.warnlabel.set_label_text('Все поля должны быть заполнены!', True)
+    #         return
+    #     try:
+    #         pages = int(pages)
+    #     except ValueError:
+    #         self.warnlabel.set_label_text('Пожалуйста, введите корректное число!', True)
+    #         return
+    #     if pages < 1:
+    #         self.warnlabel.set_label_text('Число страниц должно быть больше 0!', True)
+    #         return
+    #     self.warnlabel.set_label_text('Вы добавили новую книгу')
+    #     self.books.add_book(Book(title=title, author=author, number_of_pages=pages))
+    #     self.headlabel.set_label_text()
+    #     self.building_grid(None, self.spinner.text)
+    #     self.clear_addfields(title_obj, author_obj, pages_obj)
 
-    def clear_addfields(self, title, author, pages):
-        """Очистка полей добавления книги"""
-        title.text = ''
-        author.text = ''
-        pages.text = ''
+    # def clear_addfields(self, title, author, pages):
+    #     """Очистка полей добавления книги"""
+    #     title.text = ''
+    #     author.text = ''
+    #     pages.text = ''
 
-    def text_control(self, field):
-        """Контроллирование перемещения по полям ввода tab'ом"""
-        if field.text.endswith('\t'):
-            field.text = field.text[:-1]
-            idx = self.markers.index(field)
-            field.focus = False
-            if idx == len(self.markers)-1:
-                self.markers[0].focus = True
-            else:
-                self.markers[idx+1].focus = True
+    # def text_control(self, field):
+    #     """Контроллирование перемещения по полям ввода tab'ом"""
+    #     if field.text.endswith('\t'):
+    #         field.text = field.text[:-1]
+    #         idx = self.markers.index(field)
+    #         field.focus = False
+    #         if idx == len(self.markers)-1:
+    #             self.markers[0].focus = True
+    #         else:
+    #             self.markers[idx+1].focus = True
 
 
-class ReadingTrackerApp(App):
+# class MyButton(MDFloatingActionButtonSpeedDial):
+#     def item_pressed(cls, name):
+#         print(name)
+
+class ReadingTrackerApp(MDApp):
     """Базовое приложение"""
+    data = DictProperty()
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.books = BookCollection()
@@ -229,16 +248,60 @@ class ReadingTrackerApp(App):
             self.books.load_books()
         except (FileNotFoundError, LookupError):
             pass
+        self.theme_cls.theme_style = 'Dark'
+        self.theme_cls.primary_palette = 'Teal'
+        # data = {
+        #     'Автору': ['face-man-outline', 'on_press', lambda x: self.item_pressed('Автору')],
+        #     'Названию': 'bookshelf', 'Страницам': 'book-open-page-variant','Прочитано': 'check-bold'
+        # }
 
     def build(self):
+        self.data = {
+            'Автору': [
+                'face-man-outline', 'on_press', lambda x: print('Автору'),
+                'on_release', lambda x: self.callback(x, 'Автору')
+                # 'on_release', lambda x: print(
+                #     'stack_buttons', self.root.ids.f_sort.stack_buttons
+                # )
+            ],
+            'Названию': [
+                'bookshelf', 'on_press', lambda x: print('Названию'),
+                'on_release', lambda x: self.callback(x, 'Названию')
+            ],
+            'Страницам': [
+                'book-open-page-variant', 'on_press', lambda x: print('Страницам'),
+                'on_release', lambda x: self.callback(x, 'Страницам')
+            ],
+            'Прочитано': [
+                'check-bold', 'on_press', lambda x: print('Прочитано'),
+                'on_release', lambda x: self.callback(x, 'Прочитано')
+            ],
+            # 'Названию': 'bookshelf', 'Страницам': 'book-open-page-variant','Прочитано': 'check-bold'
+        }
         sm = ScreenManager()
-        sm.add_widget(MainScreen(self.books))
+        self.main_screen = MainScreen(self.books)
+        sm.add_widget(self.main_screen)
         return sm
 
     def on_stop(self):
         """Сохранение обновленного файла со списком книг"""
         self.books.save_books()
         return super().on_stop()
+
+    # def callback(self, button):
+    #     # print(button.children)
+    #     print(button.icon)
+    #     # print(button.item_pressed())
+    #     print(self.last_clicked_button)
+    def callback(self, button, sort_event):
+        # print(button)
+        # print(type(button))
+        # print(self.root.children)
+        print(self.main_screen.main_box.building_grid(None, sort_event))
+
+    # @classmethod
+    # def item_pressed(cls, name):
+    #     print(name)
 
 
 if __name__ == '__main__':

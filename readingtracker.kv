@@ -2,6 +2,8 @@
 <BookButton>:
     text: ''
     size_hint_y: None
+    text_size: self.width, None
+    halign: 'center'
 
 <BookLabel>:
     text: ''
@@ -19,58 +21,59 @@
 
 # Главный блок
 <MainBox>:
-    spinner: f_spin
+    id: main_box
+    # spinner: f_spin
     maingrid: f_grid
     recycle: f_rec
     headlabel: f_head
     warnlabel: f_warn
     # Левый блок
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint_x: 1
-        Label:
-            text: 'Сортировать по:'
-            font_size: 16
-            size_hint_y: None
-            height: dp(50)
-        # Выпадающий список выбора сортировки
-        Spinner:
-            id: f_spin
-            text: 'Автору'
-            values: ('Автору', 'Названию', 'Страницам', 'Прочитано')
-            on_text: root.building_grid(f_spin, f_spin.text)
-        # Ввод новой книги
-        Label:
-            text: 'Добавить новую книгу...'
-            font_size: 16
-        Label:
-            text: 'Название:'
-        TextInput:
-            id: add_title
-            text: ''
-            on_text: root.text_control(add_title)
-        Label:
-            text: 'Автор:'
-        TextInput:
-            id: add_author
-            text: ''
-            on_text: root.text_control(add_author)
-        Label:
-            text: 'Страниц:'
-        TextInput:
-            id: add_pages
-            text: ''
-            on_text: root.text_control(add_pages)
-        # Кнопка добавления книги
-        Button:
-            text: 'Добавить книгу'
-            on_press: root.add_book(add_title, add_author, add_pages)
-        # Кнопка очистки полей ввода
-        Button:
-            text: 'Очистить'
-            on_press: root.clear_addfields(add_title, add_author, add_pages)
+    # BoxLayout:
+    #     orientation: 'vertical'
+    #     size_hint_x: 1
+    #     Label:
+    #         text: 'Сортировать по:'
+    #         font_size: 16
+    #         size_hint_y: None
+    #         height: dp(50)
+    #     # Выпадающий список выбора сортировки
+    #     Spinner:
+    #         id: f_spin
+    #         text: 'Автору'
+    #         values: ('Автору', 'Названию', 'Страницам', 'Прочитано')
+    #         on_text: root.building_grid(f_spin, f_spin.text)
+    #     # Ввод новой книги
+    #     Label:
+    #         text: 'Добавить новую книгу...'
+    #         font_size: 16
+    #     Label:
+    #         text: 'Название:'
+    #     TextInput:
+    #         id: add_title
+    #         text: ''
+    #         on_text: root.text_control(add_title)
+    #     Label:
+    #         text: 'Автор:'
+    #     TextInput:
+    #         id: add_author
+    #         text: ''
+    #         on_text: root.text_control(add_author)
+    #     Label:
+    #         text: 'Страниц:'
+    #     TextInput:
+    #         id: add_pages
+    #         text: ''
+    #         on_text: root.text_control(add_pages)
+    #     # Кнопка добавления книги
+    #     Button:
+    #         text: 'Добавить книгу'
+    #         on_press: root.add_book(add_title, add_author, add_pages)
+    #     # Кнопка очистки полей ввода
+    #     Button:
+    #         text: 'Очистить'
+    #         on_press: root.clear_addfields(add_title, add_author, add_pages)
     # Правый блок
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
         size_hint_x: 3
         # Верхняя надпись
@@ -86,7 +89,28 @@
                 spacing: 10
                 size_hint_y: None
         # Нижняя надпись
+        # BoxLayout:
         WarningLabel:
             id: f_warn
             text: "Добро пожаловать в Reading Tracker 2.0!"
-            on_text: root.building_grid(f_spin, f_spin.text)
+            # size_hint_x: .8
+            # on_text: root.building_grid(f_spin, f_spin.text)
+        # MDRaisedButton:
+        MDFloatingActionButtonSpeedDial:
+            id: f_sort
+            icon: "sort"
+            # callback: app.callback
+            data: app.data
+            # data: {'Автору': 'face-man-outline', 'Названию': 'bookshelf', 'Страницам': 'book-open-page-variant','Прочитано': 'check-bold'}
+            size_hint_x: .2
+            label_text_color: [0, 1, 1, .8]
+            # hint_animation: True
+            # root_button_anim: True
+            # right_pad: False
+            # label_bg_color: "orange"
+            # text: 'Сорт'
+            # size_hint_x: .2
+            # pos_hint: {"center_x": .5, "center_y": .5}
+            # pos_hint: {"center_x": .5, "top": 1}
+            # on_press_stack_button: app.callback(f_sort)
+            # on_release_stack_button: app.callback(f_sort)
