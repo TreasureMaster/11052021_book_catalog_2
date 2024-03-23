@@ -286,27 +286,25 @@ class ReadingTrackerApp(MDApp):
         print(self.main_screen.main_box.building_grid(None, sort_event))
 
     def show_confirmation_dialog(self):
-        # print('dialog')
         if not self.dialog:
             content_cls = Content()
             self.dialog = MDDialog(
                 title="Добавить новую книгу",
                 type="custom",
-                # content_cls=Content(),
                 content_cls=content_cls,
                 buttons=[
                     MDFlatButton(
                         text="ОТМЕНИТЬ",
                         theme_text_color="Custom",
                         text_color=self.theme_cls.primary_color,
-                        on_release=self.dialog_close
+                        on_release=lambda x: self.dialog_close(x, content_cls)
                     ),
-                    MDFlatButton(
-                        text="ОЧИСТИТЬ",
-                        theme_text_color="Custom",
-                        text_color=self.theme_cls.primary_color,
-                        on_release=lambda x: self.dialog_clear(x, content_cls)
-                    ),
+                    # MDFlatButton(
+                    #     text="ОЧИСТИТЬ",
+                    #     theme_text_color="Custom",
+                    #     text_color=self.theme_cls.primary_color,
+                    #     on_release=lambda x: self.dialog_clear(x, content_cls)
+                    # ),
                     MDFlatButton(
                         text="ДОБАВИТЬ",
                         theme_text_color="Custom",
@@ -317,7 +315,8 @@ class ReadingTrackerApp(MDApp):
             )
         self.dialog.open()
 
-    def dialog_close(self, *args):
+    def dialog_close(self, instance, content_cls):
+        self.dialog_clear(instance, content_cls)
         self.dialog.dismiss(force=True)
 
     def add_book(self, instance, content_cls):
