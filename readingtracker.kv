@@ -19,6 +19,24 @@
 <WarningLabel@BookLabel>:
     text: ''
 
+<Content>
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "180dp"
+
+    MDTextField:
+        id: book_author
+        hint_text: "Автор"
+
+    MDTextField:
+        id: book_title
+        hint_text: "Название"
+
+    MDTextField:
+        id: book_page
+        hint_text: "Количество страниц"
+
 # Главный блок
 <MainBox>:
     id: main_box
@@ -77,8 +95,16 @@
         orientation: 'vertical'
         size_hint_x: 3
         # Верхняя надпись
+        MDFloatLayout:
+            MDRaisedButton:
+                text: '+'
+                # icon: 'plus-circle-outline'
+                pos_hint: {'top': 1}
+                on_release: app.show_confirmation_dialog()
+                # size_hint_x: .2
         HeadLabel:
             id: f_head
+            # size_hint_x: .8
         # Список книг
         RecycleView:
             id: f_rec

@@ -13,7 +13,8 @@ from kivymd.uix.button import MDFloatingActionButtonSpeedDial
 from kivymd.uix.responsivelayout import MDResponsiveLayout
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.label.label import MDLabel
-from kivymd.uix.button.button import MDTextButton, MDFlatButton
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button.button import MDTextButton, MDFlatButton, MDRaisedButton
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.spinner import Spinner
 from kivy.uix.boxlayout import BoxLayout
@@ -165,7 +166,7 @@ class MainBox(MDBoxLayout):
         self.warnlabel.set_label_text("Добро пожаловать в Reading Tracker 2.0!")
         self.building_grid(None, 'Автору')
 
-    def building_grid(self, instance, value):
+    def building_grid(self, instance, value=None):
         """Построение списка книг"""
         LABEL_MAP = {
             'Автору': 'author',
@@ -173,7 +174,6 @@ class MainBox(MDBoxLayout):
             'Страницам': 'pages',
             'Прочитано': 'completed',
         }
-        # self.books.sort(value)
         self.books.sort(LABEL_MAP[value])
         # Построение окна прокрутки
         self.recycle.width = Window.width
@@ -194,26 +194,26 @@ class MainBox(MDBoxLayout):
                 )
             )
 
-    # def add_book(self, title_obj, author_obj, pages_obj):
-    #     """Обработка добавления книги"""
-    #     title, author, pages = map(str.strip, (title_obj.text, author_obj.text, pages_obj.text))
-    #     # Проверка правильности ввода полей
-    #     if not title or not author or not pages:
-    #         self.warnlabel.set_label_text('Все поля должны быть заполнены!', True)
-    #         return
-    #     try:
-    #         pages = int(pages)
-    #     except ValueError:
-    #         self.warnlabel.set_label_text('Пожалуйста, введите корректное число!', True)
-    #         return
-    #     if pages < 1:
-    #         self.warnlabel.set_label_text('Число страниц должно быть больше 0!', True)
-    #         return
-    #     self.warnlabel.set_label_text('Вы добавили новую книгу')
-    #     self.books.add_book(Book(title=title, author=author, number_of_pages=pages))
-    #     self.headlabel.set_label_text()
-    #     self.building_grid(None, self.spinner.text)
-    #     self.clear_addfields(title_obj, author_obj, pages_obj)
+    def add_book(self, title_obj, author_obj, pages_obj, sorting):
+        """Обработка добавления книги"""
+        title, author, pages = map(str.strip, (title_obj.text, author_obj.text, pages_obj.text))
+        # Проверка правильности ввода полей
+        if not title or not author or not pages:
+            self.warnlabel.set_label_text('Все поля должны быть заполнены!', True)
+            return
+        try:
+            pages = int(pages)
+        except ValueError:
+            self.warnlabel.set_label_text('Пожалуйста, введите корректное число!', True)
+            return
+        if pages < 1:
+            self.warnlabel.set_label_text('Число страниц должно быть больше 0!', True)
+            return
+        self.warnlabel.set_label_text('Вы добавили новую книгу')
+        self.books.add_book(Book(title=title, author=author, number_of_pages=pages))
+        self.headlabel.set_label_text()
+        self.building_grid(None, sorting)
+        # self.clear_addfields(title_obj, author_obj, pages_obj)
 
     # def clear_addfields(self, title, author, pages):
     #     """Очистка полей добавления книги"""
@@ -233,13 +233,13 @@ class MainBox(MDBoxLayout):
     #             self.markers[idx+1].focus = True
 
 
-# class MyButton(MDFloatingActionButtonSpeedDial):
-#     def item_pressed(cls, name):
-#         print(name)
+class Content(BoxLayout):
+    ...
 
 class ReadingTrackerApp(MDApp):
     """Базовое приложение"""
     data = DictProperty()
+    dialog = None
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -250,33 +250,26 @@ class ReadingTrackerApp(MDApp):
             pass
         self.theme_cls.theme_style = 'Dark'
         self.theme_cls.primary_palette = 'Teal'
-        # data = {
-        #     'Автору': ['face-man-outline', 'on_press', lambda x: self.item_pressed('Автору')],
-        #     'Названию': 'bookshelf', 'Страницам': 'book-open-page-variant','Прочитано': 'check-bold'
-        # }
+        self.sorting = 'Автору'
 
     def build(self):
         self.data = {
             'Автору': [
                 'face-man-outline', 'on_press', lambda x: print('Автору'),
-                'on_release', lambda x: self.callback(x, 'Автору')
-                # 'on_release', lambda x: print(
-                #     'stack_buttons', self.root.ids.f_sort.stack_buttons
-                # )
+                'on_release', lambda x: self.content_sorting(x, 'Автору')
             ],
             'Названию': [
                 'bookshelf', 'on_press', lambda x: print('Названию'),
-                'on_release', lambda x: self.callback(x, 'Названию')
+                'on_release', lambda x: self.content_sorting(x, 'Названию')
             ],
             'Страницам': [
                 'book-open-page-variant', 'on_press', lambda x: print('Страницам'),
-                'on_release', lambda x: self.callback(x, 'Страницам')
+                'on_release', lambda x: self.content_sorting(x, 'Страницам')
             ],
             'Прочитано': [
                 'check-bold', 'on_press', lambda x: print('Прочитано'),
-                'on_release', lambda x: self.callback(x, 'Прочитано')
+                'on_release', lambda x: self.content_sorting(x, 'Прочитано')
             ],
-            # 'Названию': 'bookshelf', 'Страницам': 'book-open-page-variant','Прочитано': 'check-bold'
         }
         sm = ScreenManager()
         self.main_screen = MainScreen(self.books)
@@ -288,20 +281,60 @@ class ReadingTrackerApp(MDApp):
         self.books.save_books()
         return super().on_stop()
 
-    # def callback(self, button):
-    #     # print(button.children)
-    #     print(button.icon)
-    #     # print(button.item_pressed())
-    #     print(self.last_clicked_button)
-    def callback(self, button, sort_event):
-        # print(button)
-        # print(type(button))
-        # print(self.root.children)
+    def content_sorting(self, button, sort_event):
+        self.sorting = sort_event
         print(self.main_screen.main_box.building_grid(None, sort_event))
 
-    # @classmethod
-    # def item_pressed(cls, name):
-    #     print(name)
+    def show_confirmation_dialog(self):
+        # print('dialog')
+        if not self.dialog:
+            content_cls = Content()
+            self.dialog = MDDialog(
+                title="Добавить новую книгу",
+                type="custom",
+                # content_cls=Content(),
+                content_cls=content_cls,
+                buttons=[
+                    MDFlatButton(
+                        text="ОТМЕНИТЬ",
+                        theme_text_color="Custom",
+                        text_color=self.theme_cls.primary_color,
+                        on_release=self.dialog_close
+                    ),
+                    MDFlatButton(
+                        text="ОЧИСТИТЬ",
+                        theme_text_color="Custom",
+                        text_color=self.theme_cls.primary_color,
+                        on_release=lambda x: self.dialog_clear(x, content_cls)
+                    ),
+                    MDFlatButton(
+                        text="ДОБАВИТЬ",
+                        theme_text_color="Custom",
+                        text_color=self.theme_cls.primary_color,
+                        on_release=lambda x: self.add_book(x, content_cls)
+                    ),
+                ],
+            )
+        self.dialog.open()
+
+    def dialog_close(self, *args):
+        self.dialog.dismiss(force=True)
+
+    def add_book(self, instance, content_cls):
+        content = [
+            content_cls.ids.book_title,
+            content_cls.ids.book_author,
+            content_cls.ids.book_page,
+        ]
+        [print(item.text) for item in content]
+        self.main_screen.main_box.add_book(*content, self.sorting)
+        self.dialog_clear(instance, content_cls)
+        self.dialog_close()
+
+    def dialog_clear(self, instance, content_cls):
+        content_cls.ids.book_title.text = ''
+        content_cls.ids.book_author.text = ''
+        content_cls.ids.book_page.text = ''
 
 
 if __name__ == '__main__':
