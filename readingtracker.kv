@@ -8,7 +8,7 @@
 <BookLabel>:
     text: ''
     size_hint_y: None
-    font_size: 16
+    font_size: 20
     height: dp(50)
 
 # Расширенное объявление меток
@@ -96,9 +96,17 @@
         size_hint_x: 3
         # Верхняя надпись
         MDFloatLayout:
-            MDRaisedButton:
-                text: '+'
+            # MDRaisedButton:
+            MDIconButton:
+                # text: '+'
                 # icon: 'plus-circle-outline'
+                # icon: 'card-plus'
+                # icon: 'plus-box'
+                # icon: 'plus-thick'
+                icon: 'layers-plus'
+                # theme_icon_color: "Custom"
+                # icon_color: app.theme_cls.primary_color
+                md_bg_color: app.theme_cls.primary_color
                 pos_hint: {'top': 1}
                 on_release: app.show_confirmation_dialog()
                 # size_hint_x: .2

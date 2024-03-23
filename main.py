@@ -190,7 +190,7 @@ class MainBox(MDBoxLayout):
                     top_label=self.headlabel,
                     warn_label=self.warnlabel,
                     text=str(book),
-                    size_hint_y=None
+                    size_hint_y=None,
                 )
             )
 
@@ -204,7 +204,7 @@ class MainBox(MDBoxLayout):
         try:
             pages = int(pages)
         except ValueError:
-            self.warnlabel.set_label_text('Пожалуйста, введите корректное число!', True)
+            self.warnlabel.set_label_text('Пожалуйста, введите корректное число страниц!', True)
             return
         if pages < 1:
             self.warnlabel.set_label_text('Число страниц должно быть больше 0!', True)
@@ -325,10 +325,10 @@ class ReadingTrackerApp(MDApp):
             content_cls.ids.book_author,
             content_cls.ids.book_page,
         ]
-        [print(item.text) for item in content]
+        # [print(item.text) for item in content]
         self.main_screen.main_box.add_book(*content, self.sorting)
         self.dialog_clear(instance, content_cls)
-        self.dialog_close()
+        self.dialog_close(instance, content_cls)
 
     def dialog_clear(self, instance, content_cls):
         content_cls.ids.book_title.text = ''
