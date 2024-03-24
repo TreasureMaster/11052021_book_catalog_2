@@ -14,6 +14,8 @@ from kivymd.uix.responsivelayout import MDResponsiveLayout
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.label.label import MDLabel
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.card import MDCardSwipe
+from kivymd.uix.list.list import OneLineListItem
 from kivymd.uix.button.button import MDTextButton, MDFlatButton, MDRaisedButton
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.spinner import Spinner
@@ -25,7 +27,7 @@ from kivy.uix.recycleview import RecycleView
 from kivy.core.window import Window
 from kivy.metrics import dp
 from kivy.graphics import Color, Rectangle
-from kivy.properties import ObjectProperty, DictProperty
+from kivy.properties import ObjectProperty, DictProperty, StringProperty
 
 from bookcollection import BookCollection
 from book import Book
@@ -52,8 +54,11 @@ class MainScreen(Screen):
         self.add_widget(self.main_box)
 
 
-class BookButton(Button):
-# class BookButton(MDFlatButton):
+class SwipeToDeleteItem(MDCardSwipe):
+    text = StringProperty()
+
+
+class BookButton(SwipeToDeleteItem):
     """Кнопка со ссылкой на определенную книгу."""
     def __init__(self, book, top_label, warn_label, **kwargs):
         super().__init__(**kwargs)
@@ -68,7 +73,8 @@ class BookButton(Button):
 
     def set_color(self):
         """Установка цвета кнопки в зависимости от необходимости/завершения чтения"""
-        self.background_color = 'white' if self.book.is_completed else 'aqua'
+        # self.background_color = 'white' if self.book.is_completed else 'aqua'
+        self.ids.content.bg_color = (.3, .3, .3, .8) if self.book.is_completed else (0, .5, .5, .8)
 
     def on_press(self):
         """Обработка нажатия на кнопку книги"""
@@ -85,6 +91,10 @@ class BookButton(Button):
             (' Хорошая работа!' if self.book.is_completed else ' Начнем!') if self.book.is_long() else ''
         )
         self.warn_label.set_label_text(text)
+
+    # def on_touch_down(self, touch):
+    #     """Обработка нажатия на кнопку книги"""
+    #     print(touch)
 
 
 class BookLabel(Label):
@@ -254,19 +264,19 @@ class ReadingTrackerApp(MDApp):
 
     def build(self):
         self.data = {
-            'Автору': [
+            'по автору': [
                 'face-man-outline', 'on_press', lambda x: print('Автору'),
                 'on_release', lambda x: self.content_sorting(x, 'Автору')
             ],
-            'Названию': [
+            'по названию': [
                 'bookshelf', 'on_press', lambda x: print('Названию'),
                 'on_release', lambda x: self.content_sorting(x, 'Названию')
             ],
-            'Страницам': [
+            'по страницам': [
                 'book-open-page-variant', 'on_press', lambda x: print('Страницам'),
                 'on_release', lambda x: self.content_sorting(x, 'Страницам')
             ],
-            'Прочитано': [
+            'прочитано': [
                 'check-bold', 'on_press', lambda x: print('Прочитано'),
                 'on_release', lambda x: self.content_sorting(x, 'Прочитано')
             ],
@@ -334,6 +344,16 @@ class ReadingTrackerApp(MDApp):
         content_cls.ids.book_title.text = ''
         content_cls.ids.book_author.text = ''
         content_cls.ids.book_page.text = ''
+
+    def remove_item(self, instance):
+        children = instance.parent.children
+        self.books.books.remove(instance.book)
+        instance.book.delete_instance()
+        children.remove(instance)
+        self.main_screen.main_box.building_grid(None, self.sorting)
+
+    def set_read_book(self, swipe_button):
+        swipe_button.on_press()
 
 
 if __name__ == '__main__':

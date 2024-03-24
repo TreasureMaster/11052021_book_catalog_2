@@ -37,6 +37,34 @@
         id: book_page
         hint_text: "Количество страниц"
 
+<SwipeToDeleteItem>:
+    id: swipe_button
+    size_hint_y: None
+    height: content.height
+    md_bg_color: 'black'
+
+    MDCardSwipeLayerBox:
+        padding: "8dp"
+
+        MDIconButton:
+            icon: "trash-can"
+            # theme_icon_color: "Custom"
+            # icon_color: app.theme_cls.primary_color
+            pos_hint: {"center_y": .5}
+            on_release: app.remove_item(root)
+
+    MDCardSwipeFrontBox:
+        # md_bg_color: (0, .5, .5, .8)
+
+        OneLineListItem:
+            id: content
+            text: root.text
+            _no_ripple_effect: True
+            # on_touch_down: app.set_read_book(content.text)
+            on_release: app.set_read_book(swipe_button)
+            bg_color: (0, .5, .5, .8)
+
+
 # Главный блок
 <MainBox>:
     id: main_box
@@ -114,6 +142,12 @@
             id: f_head
             # size_hint_x: .8
         # Список книг
+        # MDScrollView:
+        #     id: f_rec
+        #     MDList:
+        #         # id: md_list
+        #         id: f_grid
+        #         padding: 0
         RecycleView:
             id: f_rec
             size_hint: 1, None
